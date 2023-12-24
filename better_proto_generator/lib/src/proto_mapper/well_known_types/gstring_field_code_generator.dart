@@ -22,6 +22,6 @@ class GStringFieldCodeGenerator extends WKTFieldCodeGenerator {
     if (fieldDescriptor.isNullable) {
       return '''(${protoRef}has${protoFieldName.pascalName}() ? $protoRef$protoFieldName.value : null)''';
     }
-    return '$protoRef$protoFieldName';
+    return '$protoRef$protoFieldName!';
   }
 }

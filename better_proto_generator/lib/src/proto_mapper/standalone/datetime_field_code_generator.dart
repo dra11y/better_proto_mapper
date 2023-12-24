@@ -18,7 +18,7 @@ class SDateTimeFieldCodeGenerator extends WKTFieldCodeGenerator {
       '''DateTime.fromMicrosecondsSinceEpoch($protoRef$fieldName.toInt())''';
 
   String get fromProtoNullableExpression =>
-      '''(${protoRef}has${protoFieldName.pascalName}() ? DateTime.fromMicrosecondsSinceEpoch($protoRef$fieldName.toInt()) : null)''';
+      '''(${protoRef}has${protoFieldName.pascalName}() ? DateTime.fromMicrosecondsSinceEpoch($protoRef$fieldName!.toInt()) : null)''';
 
   @override
   String get fromProtoMap {

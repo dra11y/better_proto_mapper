@@ -22,7 +22,7 @@ class GDateTimeFieldCodeGenerator extends WKTFieldCodeGenerator {
       '''$protoRef$fieldName.toDateTime()''';
 
   String get fromProtoNullableExpression =>
-      '''(${protoRef}has${protoFieldName.pascalName}() ? ($fromProtoNonNullableExpression) : null)''';
+      '''(${protoRef}has${protoFieldName.pascalName}() ? ($protoRef$fieldName!.toDateTime()) : null)''';
 
   @override
   String get fromProtoMap {

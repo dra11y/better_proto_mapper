@@ -30,7 +30,7 @@ class DecimalFieldCodeGenerator
 
   @override
   String get fromProtoMap =>
-      '${fieldDescriptor.isNullable ? '\$NullableDecimalProtoExtension' : '\$DecimalProtoExtension'}.$_fromMethodName($protoRef$protoFieldName)';
+      '${fieldDescriptor.isNullable ? '\$NullableDecimalProtoExtension' : '\$DecimalProtoExtension'}.$_fromMethodName($protoRef$protoFieldName!)';
 
   String get _toMethodName => decimalToMethodName(config);
 

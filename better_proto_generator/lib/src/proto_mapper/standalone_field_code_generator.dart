@@ -48,13 +48,13 @@ abstract class StandaloneFieldCodeGenerator
     if (fieldDescriptor.isNullable) {
       return '''(${protoRef}has${protoFieldName.pascalCase}() ? $protoRef$protoFieldName : null)''';
     }
-    return '$protoRef$protoFieldName';
+    return '$protoRef$protoFieldName!';
   }
 
   String get fromProtoNullableExpression =>
       '''($ref${protoFieldName}HasValue ? ($fromProtoNonNullableExpression) : null)''';
 
-  String get fromProtoNonNullableExpression => '$ref$protoFieldName';
+  String get fromProtoNonNullableExpression => '$ref$protoFieldName!';
 
   static FieldCodeGenerator? fromFieldDescriptor({
     required FieldDescriptor fieldDescriptor,

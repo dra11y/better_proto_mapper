@@ -18,7 +18,7 @@ class SDurationFieldCodeGenerator extends WKTFieldCodeGenerator {
       '''Duration(microseconds: $protoRef$fieldName.toInt())''';
 
   String get fromProtoNullableExpression =>
-      '''(${protoRef}has${protoFieldName.pascalName}() ? Duration(microseconds: $protoRef$fieldName.toInt()) : null)''';
+      '''(${protoRef}has${protoFieldName.pascalName}() ? Duration(microseconds: $protoRef$fieldName!.toInt()) : null)''';
 
   @override
   String get fromProtoMap {
