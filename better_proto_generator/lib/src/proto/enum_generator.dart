@@ -3,6 +3,7 @@ import 'package:analyzer/dart/element/element.dart';
 import 'package:better_proto_annotations/config.dart';
 import 'package:better_proto_annotations/better_proto_annotations.dart';
 import 'package:better_proto_generator/src/proto/interface_element_extension.dart';
+import 'package:better_proto_generator/src/proto/reserved_fields_proto_extension.dart';
 
 class EnumGenerator {
   EnumGenerator({
@@ -21,9 +22,6 @@ class EnumGenerator {
       annotation: annotation,
       config: config,
     );
-    //   .toList()
-    // ..sort((a, b) => a.protoFieldAnnotation.number
-    //     .compareTo(b.protoFieldAnnotation.number));
     final prefix = config.prefix;
     var className = interfaceElement.name;
     final zerothFields =
@@ -46,13 +44,26 @@ class EnumGenerator {
           'Found aliases in enum: $className, but @Proto.enumAllowAlias is set to false.');
     }
     for (var fieldDescriptor in fieldDescriptors) {
+      if (annotation.isReserved(fieldDescriptor.protoFieldName)) {
+        throw Exception(
+            'Proto field name: ${fieldDescriptor.protoFieldName} of field: ${fieldDescriptor.name} on enum: $className is reserved!');
+      }
+      if (annotation.isReserved(fieldDescriptor.name)) {
+        throw Exception(
+            'Field name: ${fieldDescriptor.name} on enum: $className is reserved!');
+      }
+      if (annotation.isReserved(fieldDescriptor.number)) {
+        throw Exception(
+            'Field number: ${fieldDescriptor.number} of field: ${fieldDescriptor.name} on enum: $className is reserved!');
+      }
       fieldBuffer.writeln(
-          '  ${fieldDescriptor.protoFieldName} = ${fieldDescriptor.protoFieldAnnotation.number};');
+          '  ${fieldDescriptor.protoFieldName} = ${fieldDescriptor.number};');
     }
     var ret = '''
 enum $prefix$className {
 ${allowAlias ? 'option allow_alias = true;' : ''}
-$fieldBuffer}
+$fieldBuffer
+${annotation.generateReservedFields()}}
 ''';
 
     return ret;

@@ -6,6 +6,7 @@ import 'package:better_proto_annotations/better_proto_annotations.dart';
 import 'package:better_proto_generator/src/common/constant_reader_extension.dart';
 import 'package:better_proto_generator/src/proto/field_descriptor.dart';
 import 'package:better_proto_generator/src/proto/interface_element_extension.dart';
+import 'package:better_proto_generator/src/proto/reserved_fields_proto_extension.dart';
 import 'package:source_gen/source_gen.dart';
 import 'package:squarealfa_generators_common/squarealfa_generators_common.dart';
 
@@ -48,15 +49,13 @@ class ClassGenerator {
     final classMessageContent =
         knownSubclasses.isEmpty ? fieldDeclarations : _getClassMessageContent();
 
-    final messages = '''
-
-$fieldsMessage
-
-message $prefix$className
-{
-$classMessageContent
-}
-''';
+    final messages = '''$fieldsMessage
+    message $prefix$className
+    {
+      $classMessageContent
+      ${proto.generateReservedFields()}
+    }
+    ''';
 
     return messages;
   }

@@ -345,18 +345,38 @@ class ProtoMapperGenerator extends GeneratorForAnnotation<Proto> {
     final classElement = element.asInterfaceElement();
     final className = classElement.name;
     final prefix = config.prefix;
+    final fieldBuffer = StringBuffer();
+    final annotation = _getProtoReflected(classElement)!;
+    var fieldDescriptors = classElement.getFieldDescriptors(
+      annotation: annotation.proto,
+      config: config,
+      refName: 'instance',
+      protoRefName: 'proto',
+    );
+
+    for (final fieldDescriptor in fieldDescriptors) {
+      fieldBuffer.writeln(
+          '  $className.${fieldDescriptor.protoFieldName} => ${fieldDescriptor.protoField.number},');
+    }
+
     return '''
       class \$${className}ProtoMapper implements ProtoMapper<$className, $prefix$className> {
         const \$${className}ProtoMapper();
 
         @override
         $className fromProto($prefix$className proto) =>
-          $className.values[proto.value];
-
+            $className.values.where((v) => v.fieldNumber == proto.value).firstOrNull ??
+            $className.unspecified;
 
         @override
         $prefix$className toProto($className entity) =>
-          $prefix$className.valueOf(entity.index)!;
+          $prefix$className.valueOf(entity.fieldNumber) ?? $prefix$className.unspecified;
+      }
+
+      extension \$${className}FieldNumberExtension on $className {
+        int get fieldNumber => switch(this) {
+          $fieldBuffer
+        };
       }
 
       extension \$$prefix${className}ProtoExtension on $prefix$className {

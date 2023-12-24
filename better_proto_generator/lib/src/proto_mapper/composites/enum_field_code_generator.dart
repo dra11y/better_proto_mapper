@@ -1,5 +1,4 @@
 import 'package:better_proto_generator/src/proto_mapper/composite_field_code_generator.dart';
-import 'package:squarealfa_generators_common/squarealfa_generators_common.dart';
 
 class EnumFieldCodeGenerator extends CompositeFieldCodeGenerator {
   EnumFieldCodeGenerator({
@@ -13,13 +12,11 @@ class EnumFieldCodeGenerator extends CompositeFieldCodeGenerator {
 
   @override
   String get fromProtoExpression =>
-      '''${fieldDescriptor.fieldElementTypeName}.values[$protoRef$fieldName.value]''';
+      '''$fromProtoNullableExpression ?? ${fieldDescriptor.fieldElementTypeName}.unspecified''';
 
   @override
   String get fromProtoNullableExpression {
-    return '''(${protoRef}has${protoFieldName.pascalName}()
-          ? (${fieldDescriptor.fieldElementTypeName}.values[$protoRef$fieldName.value])
-          : null)''';
+    return '''${fieldDescriptor.fieldElementTypeName}.values.where((v) => v.fieldNumber == $protoRef$fieldName?.value).firstOrNull''';
   }
 
   @override
