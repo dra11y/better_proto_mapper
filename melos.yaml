@@ -1,0 +1,10 @@
+name: better_proto_mapper
+repository: https://github.com/dra11y/better_proto_mapper
+
+ide:
+  intellij:
+    enabled: false
+
+packages:
+  - better_proto_annotations
+  - better_proto_generator

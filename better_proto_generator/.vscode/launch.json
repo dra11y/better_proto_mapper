@@ -1,0 +1,16 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Debug build Test",
+            "type": "dart",
+            "request": "launch",
+            "program": "/home/ruicraveiro/sources/dart_framework/proto_mapper/test/.dart_tool/build/entrypoint/build.dart",
+            "args": ["build"],
+            "cwd": "/home/ruicraveiro/sources/dart_framework/proto_mapper/test"
+        }
+    ]
+}

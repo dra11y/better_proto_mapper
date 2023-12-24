@@ -1,0 +1,717 @@
+// GENERATED CODE - DO NOT MODIFY BY HAND
+
+syntax = "proto3";
+
+package com.company.project;
+
+option go_package = "./stubs";
+
+
+
+
+
+
+message GStarship
+{
+
+  bytes range = 2;
+  bytes odometer = 3;
+  int32 engine_number = 4;
+
+}
+
+
+
+
+message GEncapsulatedFieldsClass
+{
+
+  string final_string = 1;
+  string encapsulated_string = 2;
+
+}
+
+
+message GFieldsOfScheduleConstraint
+{
+
+
+}
+    
+
+message GScheduleConstraint
+{
+  oneof props {
+    GFieldsOfScheduleConstraint schedule_constraint = 1;
+
+    GContestConstraint contest_constraint = 3;
+
+  }
+    
+}
+
+
+
+
+message GConstraintAdded
+{
+
+
+}
+
+
+
+
+message GContestConstraint
+{
+  GFieldsOfScheduleConstraint fieldsOfSuperClass = 1;
+
+
+}
+
+
+
+
+message GAltNaming
+{
+
+  string UnconventionalName = 19;
+  optional string NUnconventionalName = 20;
+  GApplianceType UnconventionalEnumName = 21;
+  GApplianceType NUnconventionalEnumName = 22;
+  GEmpty UnconventionalCategory = 23;
+  GEmpty NUnconventionalCategory = 24;
+  repeated GIngredient UnconventionalList = 25;
+  int64 UnconventionalDateTime = 26;
+  optional int64 NUnconventionalDateTime = 27;
+  int64 UnconventionalDuration = 28;
+  optional int64 NUnconventionalDuration = 29;
+
+}
+
+
+
+
+message GKnife
+{
+
+  string name = 1;
+  GKnifeType type = 2;
+
+}
+
+
+
+
+message GGarlicPress
+{
+
+  string name = 2;
+  bool machine_washable = 3;
+
+}
+
+
+
+
+message GKitchen
+{
+
+  repeated GRecipe recipe_list = 2;
+  map<string, GRecipe> recipe_map = 3;
+  int64 next_inspection_date = 4;
+
+}
+
+
+
+
+message GChef
+{
+
+  GRecipe favorite_recipe = 2;
+  GKnife favorite_knife = 3;
+  GApplianceType favorite_appliance_type = 4;
+  repeated string favorite_words = 5;
+  int64 birthdate = 6;
+  optional int64 shelf_life = 7;
+
+}
+
+
+
+
+message GSousChef
+{
+  GChef fieldsOfSuperClass = 1;
+
+
+}
+
+
+
+
+message GKnifeMaster
+{
+  GChef fieldsOfSuperClass = 1;
+
+  GKnife favorite_knife = 2;
+
+}
+
+
+
+
+message GInventory
+{
+
+  map<string, int32> number_of_things = 2;
+  map<string, GRecipe> recipes_by_name = 3;
+  optional int64 time_span = 4;
+
+}
+
+
+
+
+message GPrecisionSubject
+{
+
+  int64 date_property = 2;
+  int64 duration_property = 3;
+
+}
+
+
+
+
+message GComponent
+{
+
+  string description = 2;
+
+}
+
+
+
+
+message GIngredient
+{
+
+  string description = 2;
+  string quantity = 3;
+  double precision = 4;
+  int64 cooking_duration = 5;
+  GComponent main_component = 6;
+  repeated GComponent other_components = 7;
+  GComponent alternative_component = 8;
+  repeated GComponent secondary_components = 9;
+
+}
+
+
+
+
+message GAirplane
+{
+  GFieldsOfAircraft fieldsOfSuperClass = 1;
+
+  int32 wingspan = 2;
+
+}
+
+
+
+
+message GBalloon
+{
+
+  int32 weight = 2;
+  string key = 3;
+  int32 service_ceiling = 4;
+
+}
+
+
+
+
+message GBicycle
+{
+  GFieldsOfAbstractVehicle fieldsOfSuperClass = 1;
+
+  string wheel_diamater = 2;
+  string key = 3;
+
+}
+
+
+message GFieldsOfRotorcraft
+{
+  GFieldsOfAircraft fieldsOfSuperClass = 1;
+
+
+}
+    
+
+message GRotorcraft
+{
+  oneof props {
+    GFieldsOfRotorcraft rotorcraft = 1;
+
+    GHelicopter helicopter = 3;
+    GGyrocopter gyrocopter = 4;
+
+  }
+    
+}
+
+
+message GFieldsOfAircraft
+{
+  GFieldsOfVehicle fieldsOfSuperClass = 6;
+
+  int32 service_ceiling = 3;
+  string key = 4;
+
+}
+    
+
+message GAircraft
+{
+  oneof props {
+    GFieldsOfAircraft aircraft = 1;
+
+    GAirplane airplane = 3;
+    GRotorcraft rotorcraft = 4;
+    GBalloon balloon = 5;
+
+  }
+    
+}
+
+
+
+
+message GHelicopter
+{
+  GFieldsOfRotorcraft fieldsOfSuperClass = 1;
+
+
+}
+
+
+
+
+message GCar
+{
+  GFieldsOfVehicle fieldsOfSuperClass = 1;
+
+  int32 number_of_doors = 2;
+
+}
+
+
+
+
+message GScooter
+{
+  GFieldsOfAbstractVehicle fieldsOfSuperClass = 1;
+
+  string key = 2;
+
+}
+
+
+
+
+message GGyrocopter
+{
+  GFieldsOfRotorcraft fieldsOfSuperClass = 1;
+
+
+}
+
+
+
+
+message GEntity
+{
+
+  string key = 2;
+
+}
+
+
+message GFieldsOfAbstractVehicle
+{
+
+  int32 weight = 2;
+
+}
+    
+
+message GAbstractVehicle
+{
+  oneof props {
+    GFieldsOfAbstractVehicle abstract_vehicle = 1;
+
+    GBicycle bicycle = 3;
+    GScooter scooter = 4;
+
+  }
+    
+}
+
+
+message GFieldsOfVehicle
+{
+
+  int32 weight = 5;
+
+}
+    
+
+message GVehicle
+{
+  oneof props {
+    GFieldsOfVehicle vehicle = 1;
+
+    GAircraft aircraft = 3;
+    GCar car = 4;
+
+  }
+    
+}
+
+
+
+
+message GCategory
+{
+
+  string title = 2;
+  GComponent main_component = 3;
+  GComponent alternative_component = 4;
+  repeated GComponent other_components = 5;
+  repeated GComponent secondary_components = 6;
+
+}
+
+
+
+
+message GRecipe
+{
+
+  string title = 2;
+  optional string description = 3;
+  GCategory category = 4;
+  repeated GIngredient ingredients = 5;
+  int64 publish_date = 6;
+  optional int64 expiry_date = 7;
+  int64 preparation_duration = 8;
+  optional int64 total_duration = 9;
+  bool is_published = 10;
+  optional bool requires_robot = 11;
+  optional double gross_weight = 12;
+  optional double net_weight = 13;
+  GApplianceType main_appliance_type = 14;
+  GApplianceType secondary_appliance_type = 15;
+  repeated string tags = 16;
+  repeated string extra_tags = 17;
+  repeated GApplianceType more_appliance_types = 18;
+
+}
+
+
+
+
+message GEncodingTarget
+{
+
+  optional int32 some_value = 1;
+
+}
+
+
+
+
+message GAbstractParentClass1
+{
+
+
+}
+
+
+message GFieldsOfAbstractParentClass2
+{
+
+
+}
+    
+
+message GAbstractParentClass2
+{
+  oneof props {
+    GFieldsOfAbstractParentClass2 abstract_parent_class2 = 1;
+
+    GSubClass1 sub_class1 = 3;
+
+  }
+    
+}
+
+
+
+
+message GSubClass1
+{
+  GFieldsOfAbstractParentClass2 fieldsOfSuperClass = 1;
+
+
+}
+
+
+
+
+message GListsHost
+{
+
+  repeated bool vbools = 2;
+  repeated bool nvbools = 3;
+  repeated string vstrings = 4;
+  repeated string nvstrings = 5;
+  repeated int64 vdurations = 6;
+  repeated int64 nvdurations = 7;
+  repeated int64 vdatetimes = 8;
+  repeated int64 nvdatetimes = 9;
+  repeated string vdecimals = 10;
+  repeated string nvdecimals = 11;
+  repeated int32 vints = 12;
+  repeated int32 nvints = 13;
+  repeated double vdoubles = 14;
+  repeated double nvdoubles = 15;
+  repeated GApplianceType vappliance_types = 16;
+  repeated GApplianceType nvappliance_types = 17;
+
+}
+
+
+message GFieldsOfBranch
+{
+
+
+}
+    
+
+message GBranch
+{
+  oneof props {
+    GFieldsOfBranch branch = 1;
+
+    GTwig twig = 3;
+
+  }
+    
+}
+
+
+message GFieldsOfTwig
+{
+  GFieldsOfBranch fieldsOfSuperClass = 1;
+
+  int32 prop1 = 2;
+  int32 prop2 = 4;
+
+}
+    
+
+message GTwig
+{
+  oneof props {
+    GFieldsOfTwig twig = 1;
+
+    GLeaf leaf = 3;
+
+  }
+    
+}
+
+
+
+
+message GLeaf
+{
+  GFieldsOfTwig fieldsOfSuperClass = 1;
+
+
+}
+
+
+
+
+message GCalcResult
+{
+
+  int32 result = 2;
+
+}
+
+
+
+
+message GPerson
+{
+
+  optional bool bool_value = 1;
+  string dec_val = 2;
+
+}
+
+
+
+
+message GEmpty
+{
+
+
+}
+
+
+
+
+message GCalcParameters
+{
+
+  int32 parameter1 = 2;
+  int32 parameter2 = 1;
+  optional int32 parameter3 = 3;
+  optional int32 parameter4 = 4;
+  int32 parameter5 = 9;
+
+}
+
+
+
+
+message GKey
+{
+
+  string key = 2;
+
+}
+
+
+
+
+message GConstructObject1
+{
+
+  string name = 2;
+  int32 number = 3;
+
+}
+
+
+
+
+message GConstructObject2
+{
+
+  string name = 2;
+  int32 number = 3;
+
+}
+
+
+
+
+message GConstructObject3
+{
+
+  string name = 2;
+  int32 number = 3;
+
+}
+
+
+
+
+message GConstructObject4
+{
+
+  string name = 2;
+  int32 number = 3;
+
+}
+
+
+
+
+message GConstructObject5
+{
+
+  string name = 2;
+  int32 number = 3;
+
+}
+
+
+
+
+message GConstructObject6
+{
+
+  optional string name = 2;
+  optional int32 number = 3;
+
+}
+
+
+
+
+message GConstructObject7
+{
+
+  optional int32 number = 2;
+  string name = 3;
+
+}
+
+
+
+
+message GConstructObject8
+{
+
+  optional int32 number = 2;
+  string name = 3;
+
+}
+
+enum GApplianceType {
+  G_APPLIANCE_TYPE_HEAT = 0;
+  G_APPLIANCE_TYPE_COLD = 1;
+  G_APPLIANCE_TYPE_CUTLERY = 2;
+}
+
+enum GKnifeType {
+  G_KNIFE_TYPE_CHEFS_KNIFE = 0;
+  G_KNIFE_TYPE_PARING_KNIFE = 1;
+  G_KNIFE_TYPE_BREAD_KNIFE = 2;
+}
+
+enum GChefType {
+  G_CHEF_TYPE_SENIOR_CHEF = 0;
+  G_CHEF_TYPE_SOUS_CHEF = 1;
+  G_CHEF_TYPE_PASTRY_CHEF = 2;
+  G_CHEF_TYPE_FISH_CHEF = 3;
+}
+
+enum GRecipeTypes {
+  G_RECIPE_TYPES_COOK = 0;
+  G_RECIPE_TYPES_GRILL = 1;
+  G_RECIPE_TYPES_FRY = 2;
+  G_RECIPE_TYPES_STEW = 3;
+}
+

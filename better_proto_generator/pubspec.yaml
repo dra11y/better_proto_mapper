@@ -1,0 +1,30 @@
+name: better_proto_generator
+description: Code generation of .proto and Dart mapper classes to facilitate the usage of PODOs (plain-old-dart-objects) with gRPC
+homepage: https://github.com/dra11y/better_proto_mapper/-/tree/main/better_proto_generator
+repository: https://github.com/dra11y/better_proto_mapper
+publish_to: none
+
+version: 4.2.2
+
+environment:
+  sdk: '>=3.2.4 <4.0.0'
+
+dependencies:
+  source_gen: ^1.5.0
+  better_proto_annotations:
+    path: ../better_proto_annotations
+  decimal: ^2.0.0
+  grpc: ^3.0.2
+  analyzer: ^6.0.0
+  build: ^2.0.0
+  recase: ^4.0.0
+  squarealfa_generators_common: ^3.1.0
+  glob: ^2.1.1
+  path: ^1.8.2
+  collection: ^1.18.0
+
+dev_dependencies:
+  build_runner: ^2.4.7
+  build_verify: ^3.1.0
+  lints: ^3.0.0
+  test: ^1.25.0

@@ -1,0 +1,17 @@
+# Read about `build.yaml` at https://pub.dev/packages/build_config
+targets:
+  $default:
+    builders:
+      better_proto_generator:protoBuilder:
+        options:
+          useWellKnownWrappers: true
+          useWellKnownDuration: true
+          useWellKnownTimestamp: true
+          useProtoFieldNamingConventions: true
+          packageName: com.company.project
+          wellKnownDurationType: GDuration
+          wellKnownTimestampType: Timestamp
+          defaultIntPrecision: int32
+          outProtoPath: proto/model.proto
+          options:
+            - go_package = "./stubs"

@@ -1,0 +1,46 @@
+import 'dart:typed_data';
+
+import 'package:better_proto_generator_test/grpc/model.pb.dart';
+import 'package:better_proto_generator_test/src/encoding_target.dart';
+import 'package:test/test.dart';
+
+void main() {
+  group('wrapped decoding tests', () {
+    test('empty wrapper', () {
+
+      final buffer = Uint8List.fromList([10, 0]);
+
+      final gtarget = GEncodingTarget.fromBuffer(buffer);
+      final target = gtarget.toEncodingTarget();
+
+      expect(gtarget.hasSomeValue(), true);
+      expect(gtarget.someValue.value, 0);
+
+      expect(target.someValue, 0);
+    });
+
+    test('null wrapper', () {
+      final buffer = Uint8List.fromList([]);
+
+      final gtarget = GEncodingTarget.fromBuffer(buffer);
+      final target = gtarget.toEncodingTarget();
+
+      expect(gtarget.hasSomeValue(), false);
+      expect(target.someValue, null);
+    });
+
+    test('zero wrapper', () {
+      final buffer = Uint8List.fromList([10, 2, 8, 0]);
+
+      final gtarget = GEncodingTarget.fromBuffer(buffer);
+      final target = gtarget.toEncodingTarget();
+
+      expect(gtarget.hasSomeValue(), true);
+      expect(gtarget.someValue.value, 0);
+
+      expect(target.someValue, 0);
+    });
+
+
+  });
+}

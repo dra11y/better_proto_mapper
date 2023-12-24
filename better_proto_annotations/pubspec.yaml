@@ -1,0 +1,23 @@
+name: better_proto_annotations
+description: Annotations to mark and configure business model classes for code
+  generation of .proto and Dart mapper classes
+homepage: https://github.com/dra11y/better_proto_mapper/-/tree/main/better_proto_annotations
+repository: https://github.com/dra11y/better_proto_mapper
+version: 3.0.1
+
+environment:
+  sdk: ">=3.2.4 <4.0.0"
+
+dependencies:
+  decimal: ^2.3.3
+  fixnum: ^1.1.0
+  grpc: ^3.2.4
+  json_annotation: ^4.8.1
+  rational: ^2.2.2
+
+dev_dependencies:
+  build_runner: ^2.4.7
+  build_verify: ^3.1.0
+  json_serializable: ^6.7.1
+  lints: ^3.0.0
+  test: ^1.25.0
