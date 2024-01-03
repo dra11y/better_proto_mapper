@@ -54,6 +54,7 @@ class ProtoMapperGenerator extends GeneratorForAnnotation<Proto> {
           protoRefName: 'proto',
         )
         .toList();
+
     final superFieldDescriptors = <FieldDescriptor>[];
     final superRefs = <String>[];
     _fillSuperFieldDescriptors(classElement, superFieldDescriptors, superRefs);
@@ -284,6 +285,8 @@ class ProtoMapperGenerator extends GeneratorForAnnotation<Proto> {
         ? '$prefix$className toFieldsOfProto($className entity) => _\$${className}ToProto(entity);'
         : '${prefix}FieldsOf$className toFieldsOfProto($className entity) => _\$${className}ToFieldsOfProto(entity);';
 
+    final toEntity = config.toEntityMethodName ?? 'to$className';
+
     return '''
 
       class \$${className}ProtoMapper implements ProtoMapper<$className, $prefix$className> {
@@ -297,16 +300,10 @@ class ProtoMapperGenerator extends GeneratorForAnnotation<Proto> {
 
         $toFieldsOfProto
 
-        $className fromJson(String json) =>
-          _\$${className}FromProto($prefix$className.fromJson(json));
-        String toJson($className entity) => _\$${className}ToProto(entity).writeToJson();
-
-        String toBase64Proto($className entity) =>
-          base64Encode(utf8.encode(entity.toProto().writeToJson()));
-
-        $className fromBase64Proto(String base64Proto) =>
-            $prefix$className.fromJson(utf8.decode(base64Decode(base64Proto)))
-                .to$className();
+        $className fromProto3Json(Object? json,
+            {TypeRegistry typeRegistry = const TypeRegistry.empty()}) =>
+            ($prefix$className()..mergeFromProto3Json(json, typeRegistry: typeRegistry))
+              .$toEntity();
       }
 
       $toFieldsOf
@@ -324,17 +321,15 @@ class ProtoMapperGenerator extends GeneratorForAnnotation<Proto> {
 
       $fromProto
 
-      extension \$${className}ProtoExtension on $className {
+      extension \$${className}Extension on $className {
         $prefix$className toProto() => _\$${className}ToProto(this);
-        String toJson() => _\$${className}ToProto(this).writeToJson();
-
-        static $className fromProto($prefix$className proto) => _\$${className}FromProto(proto);
-        static $className fromJson(String json) => _\$${className}FromProto($prefix$className.fromJson(json));
+        Object? toProto3Json(
+          {TypeRegistry typeRegistry = const TypeRegistry.empty()}) =>
+          toProto().toProto3Json(typeRegistry: typeRegistry);
       }
 
-
       extension \$$prefix${className}ProtoExtension on $prefix$className {
-        $className to$className() => _\$${className}FromProto(this);
+        $className $toEntity() => _\$${className}FromProto(this);
       }
 
 
@@ -365,24 +360,19 @@ class ProtoMapperGenerator extends GeneratorForAnnotation<Proto> {
 
         @override
         $className fromProto($prefix$className proto) =>
-            $className.values.where((v) => v.fieldNumber == proto.value).firstOrNull ??
+            $className.values.where((v) => v.value == proto.value).firstOrNull ??
             $className.unspecified;
 
         @override
         $prefix$className toProto($className entity) =>
-          $prefix$className.valueOf(entity.fieldNumber) ?? $prefix$className.unspecified;
+          $prefix$className.valueOf(entity.value) ?? $prefix$className.unspecified;
       }
 
-      extension \$${className}FieldNumberExtension on $className {
-        int get fieldNumber => switch(this) {
+      extension \$${className}ValueExtension on $className {
+        int get value => switch(this) {
           $fieldBuffer
         };
       }
-
-      extension \$$prefix${className}ProtoExtension on $prefix$className {
-  $className to$className() =>
-      const \$${className}ProtoMapper().fromProto(this);
-}
 
   ''';
   }
@@ -409,9 +399,10 @@ class ProtoMapperGenerator extends GeneratorForAnnotation<Proto> {
     final ret = kscs.map((ksc) {
       final className = ksc.getDisplayString(withNullability: false);
       final camelClassName = className.camelCase;
+      final toEntity = config.toEntityMethodName ?? 'to$className';
       final expression = '''
       if (sInstance.has$className()) {
-        return sInstance.$camelClassName.to$className();
+        return sInstance.$camelClassName.$toEntity();
       }
       ''';
       return expression;

@@ -16,7 +16,7 @@ class EnumFieldCodeGenerator extends CompositeFieldCodeGenerator {
 
   @override
   String get fromProtoNullableExpression {
-    return '''${fieldDescriptor.fieldElementTypeName}.values.where((v) => v.fieldNumber == $protoRef$fieldName?.value).firstOrNull''';
+    return '''${fieldDescriptor.fieldElementTypeName}.values.where((v) => v.value == $protoRef$fieldName?.value).firstOrNull''';
   }
 
   @override

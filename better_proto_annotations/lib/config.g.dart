@@ -23,8 +23,9 @@ Config _$ConfigFromJson(Map<String, dynamic> json) => $checkedCreate(
             'wellKnownDurationType',
             'wellKnownTimestampType',
             'defaultIntPrecision',
+            'decimalEncoding',
             'outProtoPath',
-            'decimalEncoding'
+            'toEntityMethodName'
           ],
         );
         final val = Config(
@@ -53,13 +54,15 @@ Config _$ConfigFromJson(Map<String, dynamic> json) => $checkedCreate(
               (v) =>
                   $enumDecodeNullable(_$IntPrecisionEnumMap, v) ??
                   IntPrecision.int32),
-          outProtoPath: $checkedConvert(
-              'outProtoPath', (v) => v as String? ?? 'proto/model.proto'),
           decimalEncoding: $checkedConvert(
               'decimalEncoding',
               (v) =>
                   $enumDecodeNullable(_$DecimalEncodingEnumMap, v) ??
                   DecimalEncoding.binary),
+          outProtoPath: $checkedConvert(
+              'outProtoPath', (v) => v as String? ?? 'proto/model.proto'),
+          toEntityMethodName:
+              $checkedConvert('toEntityMethodName', (v) => v as String?),
         );
         return val;
       },
@@ -77,8 +80,9 @@ Map<String, dynamic> _$ConfigToJson(Config instance) => <String, dynamic>{
       'wellKnownTimestampType': instance.wellKnownTimestampType,
       'defaultIntPrecision':
           _$IntPrecisionEnumMap[instance.defaultIntPrecision]!,
-      'outProtoPath': instance.outProtoPath,
       'decimalEncoding': _$DecimalEncodingEnumMap[instance.decimalEncoding]!,
+      'outProtoPath': instance.outProtoPath,
+      'toEntityMethodName': instance.toEntityMethodName,
     };
 
 const _$IntPrecisionEnumMap = {

@@ -50,12 +50,9 @@ class ClassGenerator {
         knownSubclasses.isEmpty ? fieldDeclarations : _getClassMessageContent();
 
     final messages = '''$fieldsMessage
-    message $prefix$className
-    {
-      $classMessageContent
-      ${proto.generateReservedFields()}
-    }
-    ''';
+message $prefix$className {$classMessageContent
+${proto.generateReservedFields()}}
+''';
 
     return messages;
   }
@@ -68,9 +65,7 @@ class ClassGenerator {
     final fieldsMessage = '''
 message ${config.prefix}FieldsOf$className
 {
-$fieldDeclarations
-}
-    ''';
+$fieldDeclarations}''';
     return fieldsMessage;
   }
 

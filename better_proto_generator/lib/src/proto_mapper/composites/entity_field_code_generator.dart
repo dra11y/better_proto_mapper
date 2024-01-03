@@ -19,5 +19,5 @@ class EntityFieldCodeGenerator extends CompositeFieldCodeGenerator {
 
   @override
   String get fromProtoNullableExpression =>
-      '(${protoRef}has${protoFieldName.pascalName}() ? const \$${fieldDescriptor.fieldElementTypeName}ProtoMapper().fromProto($protoRef$protoFieldName) : null)';
+      '(${protoRef}has${protoFieldName.pascalName}() ? const \$${fieldDescriptor.fieldElementTypeName}ProtoMapper().fromProto($protoRef$protoFieldName!) : null)';
 }

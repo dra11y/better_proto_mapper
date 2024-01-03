@@ -47,4 +47,19 @@ class FieldDescriptor extends FieldDescriptorBase {
   @override
   bool get parameterTypeIsEnum =>
       parameterType.element!.kind == ElementKind.ENUM;
+
+  @override
+  String toString() => '''FieldDescriptor(
+    proto: $proto,
+    config: $config,
+    protoField: $protoField,
+    refName: $refName,
+    protoRefName: $protoRefName,
+    displayName: ${super.displayName},
+    name: ${super.name},
+    isFinal: ${super.isFinal},
+    isLate: ${super.isLate},
+    hasInitializer: ${super.hasInitializer},
+    fieldElementType: ${super.fieldElementType},
+  )''';
 }

@@ -16,12 +16,17 @@ extension InterfaceElementExtensions on InterfaceElement {
     required Config config,
     required String refName,
     required String protoRefName,
+    // TG: changed includeInherited default to true
+    // TODO: Add inherited parameter to Proto?
+    bool includeInherited = true,
   }) {
-    final fieldSet = getSortedFieldSet(includeInherited: false);
+    final fieldSet = getSortedFieldSet(includeInherited: includeInherited);
     final fieldDescriptors = <FieldDescriptor>[];
     for (final fieldElement in fieldSet) {
       final protoField = _getProtoFieldAnnotation(fieldElement);
       if (protoField == null) {
+        print(
+            'WARNING: Field missing @ProtoField() annotation: $fieldElement, skipping.');
         continue;
       }
       final relevantFieldType = _getRelevantFieldType(fieldElement);

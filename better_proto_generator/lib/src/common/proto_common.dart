@@ -81,7 +81,7 @@ String collectionProtoToValue(
     if (config.useWellKnownTimestamp) {
       return '''$parameterName.toDateTime()''';
     }
-    return 'DateTime.fromMicrosecondsSinceEpoch($parameterName.toInt())';
+    return '$parameterName!';
   }
   if (fieldTypeName == (Duration).toString()) {
     if (config.useWellKnownDuration) {
@@ -89,7 +89,7 @@ String collectionProtoToValue(
       seconds: $parameterName.seconds.toInt(),
       microseconds: ($parameterName.nanos ~/ 1000).toInt())''';
     }
-    return 'Duration(microseconds: $parameterName.toInt())';
+    return '$parameterName!';
   }
   return ''' const \$${fieldTypeName}ProtoMapper().fromProto($parameterName)''';
 }

@@ -1,20 +1,19 @@
-name: proto_mapper_example
-description: proto_annotations and proto_generator packages demonstration project
-homepage: https://gitlab.com/dartaculous/dartaculous/-/tree/main/proto_mapper/example
-repository: https://gitlab.com/dartaculous/dartaculous
-version: 2.0.0
-
+name: better_proto_mapper_example
+description: A sample command-line application.
+version: 1.0.0
 publish_to: none
 
 environment:
-  sdk: ">=2.18.0 <4.0.0"
+  sdk: '>=3.2.4 <4.0.0'
 
 dependencies:
-  protobuf: ^3.0.0
-  proto_annotations: ^3.0.1
-dev_dependencies:
-  lints: ^2.0.1
-  test: ^1.14.4
-  better_proto_generator: ^4.2.2
-  build_runner: ^2.1.2
+  better_proto_annotations:
+    path: ../better_proto_annotations
+  protobuf: ^3.1.0
 
+dev_dependencies:
+  better_proto_generator:
+    path: ../better_proto_generator
+  build_runner: ^2.4.7
+  lints: ^3.0.0
+  test: ^1.24.0

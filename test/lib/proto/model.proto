@@ -37,7 +37,7 @@ message GFieldsOfScheduleConstraint
 
 
 }
-    
+
 
 message GScheduleConstraint
 {
@@ -47,7 +47,7 @@ message GScheduleConstraint
     GContestConstraint contest_constraint = 3;
 
   }
-    
+
 }
 
 
@@ -251,7 +251,7 @@ message GFieldsOfRotorcraft
 
 
 }
-    
+
 
 message GRotorcraft
 {
@@ -262,7 +262,7 @@ message GRotorcraft
     GGyrocopter gyrocopter = 4;
 
   }
-    
+
 }
 
 
@@ -274,7 +274,7 @@ message GFieldsOfAircraft
   string key = 4;
 
 }
-    
+
 
 message GAircraft
 {
@@ -286,7 +286,7 @@ message GAircraft
     GBalloon balloon = 5;
 
   }
-    
+
 }
 
 
@@ -348,7 +348,7 @@ message GFieldsOfAbstractVehicle
   int32 weight = 2;
 
 }
-    
+
 
 message GAbstractVehicle
 {
@@ -359,7 +359,7 @@ message GAbstractVehicle
     GScooter scooter = 4;
 
   }
-    
+
 }
 
 
@@ -369,7 +369,7 @@ message GFieldsOfVehicle
   int32 weight = 5;
 
 }
-    
+
 
 message GVehicle
 {
@@ -380,7 +380,7 @@ message GVehicle
     GCar car = 4;
 
   }
-    
+
 }
 
 
@@ -448,7 +448,7 @@ message GFieldsOfAbstractParentClass2
 
 
 }
-    
+
 
 message GAbstractParentClass2
 {
@@ -458,7 +458,7 @@ message GAbstractParentClass2
     GSubClass1 sub_class1 = 3;
 
   }
-    
+
 }
 
 
@@ -502,7 +502,7 @@ message GFieldsOfBranch
 
 
 }
-    
+
 
 message GBranch
 {
@@ -512,7 +512,7 @@ message GBranch
     GTwig twig = 3;
 
   }
-    
+
 }
 
 
@@ -524,7 +524,7 @@ message GFieldsOfTwig
   int32 prop2 = 4;
 
 }
-    
+
 
 message GTwig
 {
@@ -534,7 +534,7 @@ message GTwig
     GLeaf leaf = 3;
 
   }
-    
+
 }
 
 

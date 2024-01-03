@@ -56,18 +56,21 @@ class ProtoBuilder implements Builder {
     final renderedImports = imports.map((e) => 'import "$e";').join('\n');
     final renderedMessages = messages.join('\n');
 
-    final content = '''// GENERATED CODE - DO NOT MODIFY BY HAND
+    final newLine = RegExp(r'\n\n+');
+    final content = [
+      '',
+      '// GENERATED CODE - DO NOT MODIFY BY HAND',
+      '',
+      'syntax = "proto3";',
+      '',
+      [
+        package,
+        options,
+        renderedImports,
+        renderedMessages,
+      ].join('\n\n').replaceAll(newLine, '\n\n'),
+    ].join('\n');
 
-syntax = "proto3";
-
-$package
-
-$options
-
-$renderedImports
-
-$renderedMessages
-''';
     return content;
   }
 

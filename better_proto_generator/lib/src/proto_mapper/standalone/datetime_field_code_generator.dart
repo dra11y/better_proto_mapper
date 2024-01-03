@@ -11,14 +11,11 @@ class SDateTimeFieldCodeGenerator extends WKTFieldCodeGenerator {
   String get instanceReference =>
       '$ref$fieldName${fieldDescriptor.isNullable && ref.isNotEmpty ? '!' : ''}';
 
-  String get toProtoExpression =>
-      '''Int64($instanceReference.microsecondsSinceEpoch)''';
+  String get toProtoExpression => instanceReference;
 
-  String get fromProtoNonNullableExpression =>
-      '''DateTime.fromMicrosecondsSinceEpoch($protoRef$fieldName.toInt())''';
+  String get fromProtoNonNullableExpression => '''$protoRef$fieldName!''';
 
-  String get fromProtoNullableExpression =>
-      '''(${protoRef}has${protoFieldName.pascalName}() ? DateTime.fromMicrosecondsSinceEpoch($protoRef$fieldName!.toInt()) : null)''';
+  String get fromProtoNullableExpression => '''$protoRef$fieldName''';
 
   @override
   String get fromProtoMap {

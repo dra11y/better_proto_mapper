@@ -1,47 +1,25 @@
+
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
 syntax = "proto3";
 
-package com.mycompany.myproject;
 
-option go_package = "./stubs";
 
-message GIngredient {
+message GAuthor {
+  string id = 1;
+  string first_name = 2;
+  string last_name = 3;
+  repeated GBook books = 4;
+  int64 created = 5;
+  int64 updated = 6;
 
-  string description = 2;
-  double quantity = 3;
-  optional int32 batch_size = 4;
-  int64 estimated_preparation_time = 5;
-  int64 expiry_date = 6;
 }
 
-message GRecipe {
+message GBook {
+  string id = 1;
+  string title = 2;
+  repeated GAuthor authors = 3;
+  int64 created = 4;
+  int64 updated = 5;
 
-  string id = 2;
-  string ptitle = 3;
-  repeated GIngredient ingredients = 4;
-}
-
-message GFieldsOfVehicle { double weight = 2; }
-
-message GVehicle {
-  oneof props {
-    GFieldsOfVehicle vehicle = 1;
-
-    GCar car = 2;
-    GAirplane airplane = 3;
-  }
-}
-
-message GAirplane {
-  GFieldsOfVehicle fieldsOfSuperClass = 1;
-
-  string registration = 2;
-  int32 service_ceiling = 3;
-}
-
-message GCar {
-  GFieldsOfVehicle fieldsOfSuperClass = 1;
-
-  int32 number_of_doors = 2;
 }
