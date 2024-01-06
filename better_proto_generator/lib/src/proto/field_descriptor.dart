@@ -59,4 +59,9 @@ class FieldDescriptor extends FieldDescriptorBase {
   @override
   bool get parameterTypeIsEnum =>
       parameterType.element!.kind == ElementKind.ENUM;
+
+  @override
+  String toString() => '''$runtimeType(
+    displayName: $displayName,
+  )''';
 }

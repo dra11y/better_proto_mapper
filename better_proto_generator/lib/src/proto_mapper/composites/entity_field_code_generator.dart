@@ -15,7 +15,7 @@ class EntityFieldCodeGenerator extends CompositeFieldCodeGenerator {
 
   @override
   String get fromProtoExpression =>
-      'const \$${fieldDescriptor.fieldElementTypeName}ProtoMapper().fromProto($protoRef$protoFieldName)';
+      'const \$${fieldDescriptor.fieldElementTypeName}ProtoMapper().fromProto($protoRef$protoFieldName ?? ${fieldDescriptor.prefix}${fieldDescriptor.fieldElementTypeName}())';
 
   @override
   String get fromProtoNullableExpression =>

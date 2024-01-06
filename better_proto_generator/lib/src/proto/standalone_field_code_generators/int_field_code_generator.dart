@@ -1,7 +1,7 @@
 import 'package:better_proto_annotations/config.dart';
 import 'package:better_proto_annotations/better_proto_annotations.dart';
 
-import '../field_code_generator.dart';
+import '../proto_field_code_generator.dart';
 
 class IntFieldCodeGenerator extends StandaloneFieldCodeGenerator {
   IntFieldCodeGenerator(

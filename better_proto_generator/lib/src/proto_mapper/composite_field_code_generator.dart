@@ -5,14 +5,14 @@ import 'package:recase/recase.dart';
 import 'composites/entity_field_code_generator.dart';
 // import 'composites/generic_field_code_generator.dart';
 import 'composites/iterable_field_code_generator.dart';
-import 'field_code_generator.dart';
+import 'mapper_field_code_generator.dart';
 import 'composites/enum_field_code_generator.dart';
 import 'composites/list_field_code_generator.dart';
 import 'composites/map_field_code_generator.dart';
 import 'composites/set_field_code_generator.dart';
 import 'field_descriptor.dart';
 
-abstract class CompositeFieldCodeGenerator implements FieldCodeGenerator {
+abstract class CompositeFieldCodeGenerator implements MapperFieldCodeGenerator {
   static const defaultRefName = 'instance';
   static const defaultProtoRefName = 'proto';
 

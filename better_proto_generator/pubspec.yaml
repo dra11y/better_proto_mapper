@@ -13,6 +13,8 @@ dependencies:
   source_gen: ^1.5.0
   better_proto_annotations:
     path: ../better_proto_annotations
+  better_protoc_plugin:
+    path: /Users/tom/better_protoc_plugin
   decimal: ^2.0.0
   grpc: ^3.0.2
   analyzer: ^6.0.0

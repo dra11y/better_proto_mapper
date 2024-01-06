@@ -1,27 +1,40 @@
 import 'package:analyzer/dart/element/element.dart';
 import 'package:analyzer/dart/element/type.dart';
+import 'package:better_proto_annotations/better_proto_annotations.dart';
 import 'package:better_proto_annotations/config.dart';
 import 'package:better_proto_generator/better_proto_generator.dart';
 import 'package:better_proto_generator/src/common/constant_reader_extension.dart';
-import 'package:better_proto_annotations/better_proto_annotations.dart';
 import 'package:better_proto_generator/src/proto/proto_reflected.dart';
-import 'package:collection/collection.dart';
 import 'package:source_gen/source_gen.dart';
 import 'package:squarealfa_generators_common/squarealfa_generators_common.dart';
 
 import 'field_descriptor.dart';
 
-extension ClassElementExtensions on ClassElement {
+extension ClassElementExtension on ClassElement {
   Iterable<FieldDescriptor> getFieldDescriptors({
     required Proto annotation,
     required Config config,
+    // TG: changed includeInherited default to true
+    // TODO: Add inherited parameter to Proto?
+    bool includeInherited = true,
   }) {
-    final fieldSet = getSortedFieldSet(includeInherited: false);
+    final fieldSet = getSortedFieldSet(includeInherited: includeInherited);
     final fieldDescriptors = <FieldDescriptor>[];
+    final Set<int> indices = {};
     for (final fieldElement in fieldSet) {
       final protoField = _getProtoFieldAnnotation(fieldElement);
-      if (protoField == null) {
+      if (protoField == null || protoField.ignored) {
         continue;
+      }
+      if (protoField.number == 0) {
+        throw Exception(
+            'Field numbering on $name should start with 1, found 0 on field ${fieldElement.name},'
+            ' see https://protobuf.dev/programming-guides/proto3/#assigning');
+      }
+      if (!indices.add(protoField.number)) {
+        throw Exception(
+            'Duplicate field number on $name: ${fieldElement.name}, ${protoField.number},'
+            ' see https://protobuf.dev/programming-guides/proto3/#assigning');
       }
       final relevantFieldType = _getRelevantFieldType(fieldElement);
       final protoReflected = _getProtoReflected(relevantFieldType);
@@ -34,11 +47,13 @@ extension ClassElementExtensions on ClassElement {
       );
       fieldDescriptors.add(fd);
     }
-    return fieldDescriptors;
+    return fieldDescriptors
+      ..sort((a, b) => a.protoFieldAnnotation.number
+          .compareTo(b.protoFieldAnnotation.number));
   }
 }
 
-extension EnumElementExtensions on EnumElement {
+extension EnumElementExtension on EnumElement {
   Iterable<FieldDescriptor> getFieldDescriptors({
     required Proto annotation,
     required Config config,
@@ -51,6 +66,9 @@ extension EnumElementExtensions on EnumElement {
       if (protoField == null) {
         throw Exception(
             'Enum value ${fieldElement.name} on $name is missing annotation: @ProtoField(index)!');
+      }
+      if (protoField.ignored) {
+        throw Exception('@ProtoField.ignore() on enum values is unsupported!');
       }
       if (protoField.number == 0 && fieldElement.name != 'unspecified') {
         throw Exception(

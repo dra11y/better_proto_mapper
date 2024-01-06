@@ -8,7 +8,7 @@ import 'package:better_proto_generator/src/proto_mapper/field_descriptor.dart'
     as mapperfield;
 import 'package:source_gen/source_gen.dart';
 
-import '../proto/field_code_generator.dart';
+import '../proto/proto_field_code_generator.dart';
 import '../proto/field_code_generators/imports.dart';
 
 String createFieldDeclarations({
@@ -19,7 +19,7 @@ String createFieldDeclarations({
   final fieldBuffer = StringBuffer();
 
   for (final fieldDescriptor in fieldDescriptors) {
-    final fieldCodeGenerator = FieldCodeGenerator.fromFieldDescriptor(
+    final fieldCodeGenerator = ProtoFieldCodeGenerator.fromFieldDescriptor(
       fieldDescriptor,
       config: config,
     );
@@ -78,17 +78,9 @@ String collectionProtoToValue(
     return '\$BigIntProtoExtension.\$fromProtoBytes($parameterName)';
   }
   if (fieldTypeName == (DateTime).toString()) {
-    if (config.useWellKnownTimestamp) {
-      return '''$parameterName.toDateTime()''';
-    }
     return '$parameterName!';
   }
   if (fieldTypeName == (Duration).toString()) {
-    if (config.useWellKnownDuration) {
-      return '''Duration(
-      seconds: $parameterName.seconds.toInt(),
-      microseconds: ($parameterName.nanos ~/ 1000).toInt())''';
-    }
     return '$parameterName!';
   }
   return ''' const \$${fieldTypeName}ProtoMapper().fromProto($parameterName)''';
@@ -108,18 +100,10 @@ String collectionValueToProto(
     return '$parameterName.\$toProtoBytes()';
   }
   if (fieldTypeName == (DateTime).toString()) {
-    if (config.useWellKnownTimestamp) {
-      return '''${config.wellKnownTimestampType}.fromDateTime($parameterName)''';
-    }
-    return 'Int64($parameterName.microsecondsSinceEpoch)';
+    return parameterName;
   }
   if (fieldTypeName == (Duration).toString()) {
-    if (config.useWellKnownDuration) {
-      return '''${config.wellKnownDurationType}()
-        .. seconds = Int64($parameterName.inSeconds)
-        .. nanos = ($parameterName.inMicroseconds - $parameterName.inSeconds * 1000000) * 1000''';
-    }
-    return 'Int64($parameterName.inMicroseconds)';
+    return parameterName;
   }
   return ''' const \$${fieldTypeName}ProtoMapper().toProto($parameterName)''';
 }

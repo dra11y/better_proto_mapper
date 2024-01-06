@@ -34,7 +34,6 @@ void main() {
       expect(chef.toProto().writeToJson(), equals(serialized));
       expect(chef.toProto().writeToJson(), equals(deserializedJson.toJson()));
       expect(chef.toProto().writeToJson(), equals(deserializedProto.toJson()));
-      print(chef.toJson());
     });
   });
 }

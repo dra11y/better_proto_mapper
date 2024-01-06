@@ -49,7 +49,7 @@ class FieldDescriptor extends FieldDescriptorBase {
       parameterType.element!.kind == ElementKind.ENUM;
 
   @override
-  String toString() => '''FieldDescriptor(
+  String toString() => '''$runtimeType(
     proto: $proto,
     config: $config,
     protoField: $protoField,

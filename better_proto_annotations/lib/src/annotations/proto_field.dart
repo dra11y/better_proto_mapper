@@ -19,9 +19,17 @@ class ProtoField {
   const ProtoField.int32(this.number, {this.name})
       : intPrecision = IntPrecision.int32;
 
+  const ProtoField.ignore()
+      : number = -1,
+        name = null,
+        intPrecision = null;
+
+  bool get ignored => number == -1;
+
   @override
-  String toString() => '''ProtoField(
+  String toString() => '''$runtimeType(
     number: $number,
+    ignored: $ignored,
     name: $name,
     intPrecision: $intPrecision,
   )''';

@@ -20,13 +20,3 @@ class Person {
     this.decVal,
   });
 }
-
-void main() {
-  // final dec = Decimal.parse('-10.3');
-  // final r = dec.toRational();
-  // print('${r.numerator} / ${r.denominator} / ${r.signum}');
-  // gp.recipe = GRecipe();
-  // final json = gp.writeToJson();
-  // final buffer = gp.writeToBuffer();
-  // print('${gp.hasRecipe()} - $json - $buffer');
-}

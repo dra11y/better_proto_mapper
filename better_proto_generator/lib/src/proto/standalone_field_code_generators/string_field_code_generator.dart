@@ -1,4 +1,4 @@
-import '../field_code_generator.dart';
+import '../proto_field_code_generator.dart';
 
 class StringFieldCodeGenerator extends StandaloneFieldCodeGenerator {
   StringFieldCodeGenerator(super.fieldDescriptor);

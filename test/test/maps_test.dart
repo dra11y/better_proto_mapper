@@ -28,7 +28,6 @@ void main() {
           inventory.toProto().writeToJson(), equals(deserializedJson.toJson()));
       expect(inventory.toProto().writeToJson(),
           equals(deserializedProto.toJson()));
-      print(inventory.toJson());
     });
   });
 }

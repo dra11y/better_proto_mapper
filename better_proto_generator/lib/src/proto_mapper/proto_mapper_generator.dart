@@ -10,7 +10,7 @@ import 'package:source_gen/source_gen.dart';
 import 'package:squarealfa_generators_common/squarealfa_generators_common.dart';
 import 'package:recase/recase.dart';
 
-import 'field_code_generator.dart';
+import 'mapper_field_code_generator.dart';
 import 'field_descriptor.dart';
 
 part 'proto_mapper_generator.helpers.dart';
@@ -47,7 +47,7 @@ class ProtoMapperGenerator extends GeneratorForAnnotation<Proto> {
   ) {
     final proto = protoReflected.proto;
     final fieldDescriptors = classElement
-        .getFieldDescriptors(
+        .getInterfaceFieldDescriptors(
           annotation: protoReflected.proto,
           config: config,
           refName: 'instance',
@@ -80,7 +80,7 @@ class ProtoMapperGenerator extends GeneratorForAnnotation<Proto> {
     // (that where not set by the constructor)
     for (var fieldDescriptor
         in fromFieldDescriptors.where((fd) => !fd.isFinal)) {
-      final fieldCodeGenerator = FieldCodeGenerator.fromFieldDescriptor(
+      final fieldCodeGenerator = MapperFieldCodeGenerator.fromFieldDescriptor(
         fieldDescriptor: fieldDescriptor,
         config: config,
       );
@@ -91,7 +91,7 @@ class ProtoMapperGenerator extends GeneratorForAnnotation<Proto> {
 
     // assign the to proto field assignments
     for (var fieldDescriptor in fieldDescriptors) {
-      final fieldCodeGenerator = FieldCodeGenerator.fromFieldDescriptor(
+      final fieldCodeGenerator = MapperFieldCodeGenerator.fromFieldDescriptor(
         fieldDescriptor: fieldDescriptor,
         config: config,
       );
@@ -129,7 +129,7 @@ class ProtoMapperGenerator extends GeneratorForAnnotation<Proto> {
       final ce = superType.element;
       final ceAnnot = _getProtoReflected(ce);
       if (ceAnnot == null) return;
-      final fds = ce.getFieldDescriptors(
+      final fds = ce.getInterfaceFieldDescriptors(
         annotation: ceAnnot.proto,
         config: config,
         refName: ref,
@@ -173,7 +173,7 @@ class ProtoMapperGenerator extends GeneratorForAnnotation<Proto> {
       final fieldDescriptor = fieldDescriptorList.first;
       fromFieldDescriptors.remove(fieldDescriptor);
 
-      final fieldCodeGenerator = FieldCodeGenerator.fromFieldDescriptor(
+      final fieldCodeGenerator = MapperFieldCodeGenerator.fromFieldDescriptor(
         fieldDescriptor: fieldDescriptor,
         config: config,
       );
@@ -190,7 +190,7 @@ class ProtoMapperGenerator extends GeneratorForAnnotation<Proto> {
   String _getConstructorMap(
     ParameterElement constructorParameter,
     FieldDescriptor fieldDescriptor,
-    FieldCodeGenerator fieldCodeGenerator,
+    MapperFieldCodeGenerator fieldCodeGenerator,
   ) {
     if (!constructorParameter.isNamed) {
       return '${fieldCodeGenerator.fromProtoMap},';
@@ -342,7 +342,7 @@ class ProtoMapperGenerator extends GeneratorForAnnotation<Proto> {
     final prefix = config.prefix;
     final fieldBuffer = StringBuffer();
     final annotation = _getProtoReflected(classElement)!;
-    var fieldDescriptors = classElement.getFieldDescriptors(
+    var fieldDescriptors = classElement.getInterfaceFieldDescriptors(
       annotation: annotation.proto,
       config: config,
       refName: 'instance',

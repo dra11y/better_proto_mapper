@@ -3,21 +3,28 @@ builders:
 
   protoBuilder:
     import: "package:better_proto_generator/better_proto_generator.dart"
-    builder_factories: ['protoBuilder', 'protoMapperBuilder']
-    build_extensions:
-      $lib$:
-        - .tproto
-      .dart:
-        - proto_map.g.part
+    builder_factories: ["protoBuilder", "protoMapperBuilder"]
+    build_extensions: { "$lib$": [".tproto"], ".dart": ["proto_mapper.g.part"] }
     build_to: cache
-    auto_apply: root_package
-    applies_builders: ["source_gen:combining_builder", "better_proto_generator:protoFromCache"]
-
+    auto_apply: dependents
+    runs_before: [":protoFromCache"]
+    applies_builders: [":protoFromCache"]
 
   protoFromCache:
     import: "package:better_proto_generator/better_proto_generator.dart"
-    builder_factories: ['protoFromCache']
+    builder_factories: ["protoFromCache"]
     build_extensions: {".tproto": [".proto"]}
-    required_inputs: [".tproto"]
     build_to: source
-    auto_apply: none
+    required_inputs: [".tproto"]
+    runs_before: [":protocRunner"]
+    applies_builders: [":protocRunner"]
+
+  protocRunner:
+    import: "package:better_proto_generator/better_proto_generator.dart"
+    builder_factories: ["protocRunner"]
+    build_extensions: { "$lib$": ["*"] }
+    build_to: source
+    required_inputs: [".proto"]
+    auto_apply: dependents
+    runs_before: ["source_gen:combining_builder"]
+    applies_builders: ["source_gen:combining_builder"]

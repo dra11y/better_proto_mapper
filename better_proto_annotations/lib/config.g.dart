@@ -14,14 +14,10 @@ Config _$ConfigFromJson(Map<String, dynamic> json) => $checkedCreate(
           json,
           allowedKeys: const [
             'useWellKnownWrappers',
-            'useWellKnownTimestamp',
-            'useWellKnownDuration',
             'useProtoFieldNamingConventions',
             'packageName',
             'options',
             'prefix',
-            'wellKnownDurationType',
-            'wellKnownTimestampType',
             'defaultIntPrecision',
             'decimalEncoding',
             'outProtoPath',
@@ -31,10 +27,6 @@ Config _$ConfigFromJson(Map<String, dynamic> json) => $checkedCreate(
         final val = Config(
           useWellKnownWrappers: $checkedConvert(
               'useWellKnownWrappers', (v) => v as bool? ?? false),
-          useWellKnownDuration: $checkedConvert(
-              'useWellKnownDuration', (v) => v as bool? ?? false),
-          useWellKnownTimestamp: $checkedConvert(
-              'useWellKnownTimestamp', (v) => v as bool? ?? false),
           useProtoFieldNamingConventions: $checkedConvert(
               'useProtoFieldNamingConventions', (v) => v as bool? ?? true),
           packageName:
@@ -45,10 +37,6 @@ Config _$ConfigFromJson(Map<String, dynamic> json) => $checkedCreate(
                   (v as List<dynamic>?)?.map((e) => e as String).toList() ??
                   const []),
           prefix: $checkedConvert('prefix', (v) => v as String? ?? 'G'),
-          wellKnownDurationType: $checkedConvert(
-              'wellKnownDurationType', (v) => v as String? ?? r'$Duration'),
-          wellKnownTimestampType: $checkedConvert(
-              'wellKnownTimestampType', (v) => v as String? ?? r'$Timestamp'),
           defaultIntPrecision: $checkedConvert(
               'defaultIntPrecision',
               (v) =>
@@ -70,14 +58,10 @@ Config _$ConfigFromJson(Map<String, dynamic> json) => $checkedCreate(
 
 Map<String, dynamic> _$ConfigToJson(Config instance) => <String, dynamic>{
       'useWellKnownWrappers': instance.useWellKnownWrappers,
-      'useWellKnownTimestamp': instance.useWellKnownTimestamp,
-      'useWellKnownDuration': instance.useWellKnownDuration,
       'useProtoFieldNamingConventions': instance.useProtoFieldNamingConventions,
       'packageName': instance.packageName,
       'options': instance.options,
       'prefix': instance.prefix,
-      'wellKnownDurationType': instance.wellKnownDurationType,
-      'wellKnownTimestampType': instance.wellKnownTimestampType,
       'defaultIntPrecision':
           _$IntPrecisionEnumMap[instance.defaultIntPrecision]!,
       'decimalEncoding': _$DecimalEncodingEnumMap[instance.decimalEncoding]!,

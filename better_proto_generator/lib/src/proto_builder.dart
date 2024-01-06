@@ -12,25 +12,27 @@ import 'proto/proto_generator.dart';
 
 class ProtoBuilder implements Builder {
   late Config config;
-  late ProtoGenerator protoGen;
   late String modelPath;
 
   ProtoBuilder(BuilderOptions options) {
     config = Config.fromJson(options.config);
-    protoGen = ProtoGenerator(config);
     modelPath = _getModelPath();
   }
 
   static final _allFilesInLib = Glob('lib/**.dart');
+  static final _ignoreFiles = RegExp(r'generated|.*\..*\.dart');
+
   @override
   Map<String, List<String>> get buildExtensions {
     return {
-      r'$lib$': [modelPath, 'src/proto_model.g.dart'],
+      r'$lib$': [modelPath, 'src/proto_mapper.g.part'],
     };
   }
 
   @override
   Future<void> build(BuildStep buildStep) async {
+    final protoGen = ProtoGenerator(config);
+
     final classes = <ClassElement, ProtoReflected>{};
     final enums = <EnumElement, ProtoReflected>{};
     await _findElements(buildStep, classes, enums);
@@ -38,15 +40,17 @@ class ProtoBuilder implements Builder {
     classes.forEach((c, cr) => protoGen.generateForAnnotatedElement(c, cr));
     enums.forEach((e, cr) => protoGen.generateForAnnotatedElement(e, cr));
 
-    String content = _renderProto();
+    String content = _renderProto(protoGen);
     final path = p.join('lib', p.dirname(modelPath));
     final filename = p.basename(modelPath);
     final output = AssetId(buildStep.inputId.package, p.join(path, filename));
 
+    print('Ran ProtoBuilder with output: $output');
+
     await buildStep.writeAsString(output, content);
   }
 
-  String _renderProto() {
+  String _renderProto(ProtoGenerator protoGen) {
     final imports = protoGen.imports;
     final messages = protoGen.messages;
 
@@ -79,9 +83,15 @@ class ProtoBuilder implements Builder {
       Map<ClassElement, ProtoReflected> classes,
       Map<EnumElement, ProtoReflected> enums) async {
     await for (final input in buildStep.findAssets(_allFilesInLib)) {
+      if (_ignoreFiles.hasMatch(input.path)) {
+        // print('IGNORED INPUT: ${input.path}');
+        continue;
+      }
+
       if (!await buildStep.resolver.isLibrary(input)) {
         continue;
       }
+
       final library = await buildStep.resolver.libraryFor(input);
       final classesInLibrary = LibraryReader(library).classes;
       for (var c in classesInLibrary) {

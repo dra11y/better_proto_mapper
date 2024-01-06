@@ -5,8 +5,6 @@ import 'package:better_proto_generator/src/proto_mapper/composite_field_code_gen
 import 'field_code_generators/bigint_field_code_generator.dart';
 import 'field_code_generators/decimal_field_code_generator.dart';
 import 'field_descriptor.dart';
-import 'standalone/datetime_field_code_generator.dart';
-import 'standalone/duration_field_code_generator.dart';
 import 'standalone/generic_field_code_generator.dart';
 import 'well_known_types/gbool_field_code_generator.dart';
 import 'well_known_types/gdatetime_field_code_generator.dart';
@@ -15,18 +13,18 @@ import 'well_known_types/gduration_field_code_generator.dart';
 import 'well_known_types/gint_field_code_generator.dart';
 import 'well_known_types/gstring_field_code_generator.dart';
 
-abstract class FieldCodeGenerator {
+abstract class MapperFieldCodeGenerator {
   String get toProtoMap;
   String get fromProtoMap;
 
   static const defaultRefName = 'instance';
   static const defaultProtoRefName = 'proto';
 
-  factory FieldCodeGenerator.fromFieldDescriptor({
+  factory MapperFieldCodeGenerator.fromFieldDescriptor({
     required FieldDescriptor fieldDescriptor,
     required Config config,
   }) {
-    FieldCodeGenerator? fcd = _getCustomEncodedFieldCodeGenerator(
+    MapperFieldCodeGenerator? fcd = _getCustomEncodedFieldCodeGenerator(
       fieldDescriptor: fieldDescriptor,
       refName: fieldDescriptor.refName,
       protoRefName: fieldDescriptor.protoRefName,
@@ -64,8 +62,7 @@ abstract class FieldCodeGenerator {
         );
       }
     }
-    if (config.useWellKnownTimestamp &&
-        fieldDescriptor.fieldElementTypeName == (DateTime).toString()) {
+    if (fieldDescriptor.fieldElementTypeName == (DateTime).toString()) {
       return GDateTimeFieldCodeGenerator(
         fieldDescriptor: fieldDescriptor,
         refName: fieldDescriptor.refName,
@@ -73,8 +70,7 @@ abstract class FieldCodeGenerator {
         config: config,
       );
     }
-    if (config.useWellKnownDuration &&
-        fieldDescriptor.fieldElementTypeName == (Duration).toString()) {
+    if (fieldDescriptor.fieldElementTypeName == (Duration).toString()) {
       return GDurationFieldCodeGenerator(
         fieldDescriptor: fieldDescriptor,
         refName: fieldDescriptor.refName,
@@ -93,20 +89,6 @@ abstract class FieldCodeGenerator {
         protoRefName: fieldDescriptor.protoRefName,
       );
     }
-    if (fieldDescriptor.fieldElementTypeName == (DateTime).toString()) {
-      return SDateTimeFieldCodeGenerator(
-        fieldDescriptor: fieldDescriptor,
-        refName: fieldDescriptor.refName,
-        protoRefName: fieldDescriptor.protoRefName,
-      );
-    }
-    if (fieldDescriptor.fieldElementTypeName == (Duration).toString()) {
-      return SDurationFieldCodeGenerator(
-        fieldDescriptor: fieldDescriptor,
-        refName: fieldDescriptor.refName,
-        protoRefName: fieldDescriptor.protoRefName,
-      );
-    }
 
     return CompositeFieldCodeGenerator.fromFieldDescriptor(
       fieldDescriptor: fieldDescriptor,
@@ -117,7 +99,7 @@ abstract class FieldCodeGenerator {
   }
 }
 
-FieldCodeGenerator? _getCustomEncodedFieldCodeGenerator({
+MapperFieldCodeGenerator? _getCustomEncodedFieldCodeGenerator({
   required FieldDescriptor fieldDescriptor,
   required String refName,
   required String protoRefName,

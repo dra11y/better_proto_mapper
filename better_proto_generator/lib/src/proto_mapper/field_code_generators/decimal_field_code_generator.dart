@@ -1,13 +1,13 @@
 import 'package:better_proto_annotations/config.dart';
 import 'package:better_proto_generator/src/common/proto_common.dart';
 
-import '../field_code_generator.dart';
+import '../mapper_field_code_generator.dart';
 import '../field_descriptor.dart';
 import 'field_code_generator_identifiers.dart';
 
 class DecimalFieldCodeGenerator
     with FieldCodeGeneratorIdentifiers
-    implements FieldCodeGenerator {
+    implements MapperFieldCodeGenerator {
   DecimalFieldCodeGenerator({
     required this.fieldDescriptor,
     required this.refName,

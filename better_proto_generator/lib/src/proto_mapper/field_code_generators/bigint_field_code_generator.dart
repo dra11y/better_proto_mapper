@@ -1,10 +1,10 @@
-import '../field_code_generator.dart';
+import '../mapper_field_code_generator.dart';
 import '../field_descriptor.dart';
 import 'field_code_generator_identifiers.dart';
 
 class BigIntFieldCodeGenerator
     with FieldCodeGeneratorIdentifiers
-    implements FieldCodeGenerator {
+    implements MapperFieldCodeGenerator {
   BigIntFieldCodeGenerator({
     required this.fieldDescriptor,
     required this.refName,

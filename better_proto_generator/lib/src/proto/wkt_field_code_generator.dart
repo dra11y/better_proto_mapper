@@ -1,8 +1,8 @@
-part of 'field_code_generator.dart';
+part of 'proto_field_code_generator.dart';
 
 abstract class WKTFieldCodeGenerator
     with FieldCodeGeneratorMixin
-    implements FieldCodeGenerator, Imports {
+    implements ProtoFieldCodeGenerator, Imports {
   WKTFieldCodeGenerator(this.fieldDescriptor);
 
   @override

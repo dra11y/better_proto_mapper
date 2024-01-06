@@ -1,9 +1,7 @@
 import 'package:build/build.dart';
 
 class ProtoFromCache implements Builder {
-  ProtoFromCache() {
-    print('ProtoFromCache constructor');
-  }
+  ProtoFromCache();
 
   @override
   Map<String, List<String>> get buildExtensions {
@@ -17,6 +15,8 @@ class ProtoFromCache implements Builder {
     final inputId = buildStep.inputId;
     final content = await buildStep.readAsString(inputId);
     final copyId = inputId.changeExtension('.proto');
+
+    print('Ran ProtoFromCache with output: $copyId');
 
     buildStep.writeAsString(copyId, content);
   }

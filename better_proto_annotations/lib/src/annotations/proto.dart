@@ -35,7 +35,7 @@ class Proto {
   final KnownSubClasses knownSubClassMap;
 
   @override
-  String toString() => '''Proto(
+  String toString() => '''$runtimeType(
     ownFieldsNumber: $ownFieldsNumber,
     superFieldsNumber: $superFieldsNumber,
     enumAllowAlias: $enumAllowAlias,

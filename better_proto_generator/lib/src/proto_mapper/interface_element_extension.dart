@@ -10,8 +10,8 @@ import 'package:squarealfa_generators_common/squarealfa_generators_common.dart';
 
 import 'field_descriptor.dart';
 
-extension InterfaceElementExtensions on InterfaceElement {
-  Iterable<FieldDescriptor> getFieldDescriptors({
+extension InterfaceElementExtension on InterfaceElement {
+  Iterable<FieldDescriptor> getInterfaceFieldDescriptors({
     required Proto annotation,
     required Config config,
     required String refName,
@@ -22,12 +22,25 @@ extension InterfaceElementExtensions on InterfaceElement {
   }) {
     final fieldSet = getSortedFieldSet(includeInherited: includeInherited);
     final fieldDescriptors = <FieldDescriptor>[];
+    final Set<int> indices = {};
     for (final fieldElement in fieldSet) {
       final protoField = _getProtoFieldAnnotation(fieldElement);
       if (protoField == null) {
-        print(
-            'WARNING: Field missing @ProtoField() annotation: $fieldElement, skipping.');
+        throw Exception(
+            'Field on $name missing @ProtoField() annotation: $fieldElement!');
+      }
+      if (protoField.ignored) {
         continue;
+      }
+      if (this is! EnumElement && protoField.number == 0) {
+        throw Exception(
+            'getInterfaceFieldDescriptors: Field numbering on $name should start with 1, found 0 on field ${fieldElement.name},'
+            ' see https://protobuf.dev/programming-guides/proto3/#assigning');
+      }
+      if (!indices.add(protoField.number)) {
+        throw Exception(
+            'getInterfaceFieldDescriptors: Duplicate field number on $name: ${fieldElement.name}, ${protoField.number},'
+            ' see https://protobuf.dev/programming-guides/proto3/#assigning');
       }
       final relevantFieldType = _getRelevantFieldType(fieldElement);
       final protoReflected = _getProtoReflected(relevantFieldType);
@@ -41,34 +54,10 @@ extension InterfaceElementExtensions on InterfaceElement {
       );
       fieldDescriptors.add(fd);
     }
-    return fieldDescriptors;
+    return fieldDescriptors
+      ..sort((a, b) => a.protoField.number.compareTo(b.protoField.number));
   }
 }
-
-// extension EnumElementExtensions on EnumElement {
-//   Iterable<FieldDescriptor> getFieldDescriptors({
-//     required Proto annotation,
-//     required Config config,
-//   }) {
-//     final fieldSet = getSortedFieldSet(includeInherited: false);
-//     final fieldDescriptors = <FieldDescriptor>[];
-//     int index = 0;
-//     for (final fieldElement in fieldSet) {
-//       final protoField = _getProtoFieldAnnotation(fieldElement);
-//       final relevantFieldType = _getRelevantFieldType(fieldElement);
-//       final protoReflected = _getProtoReflected(relevantFieldType);
-//       final fd = FieldDescriptor.fromFieldElement(
-//         fieldElement: fieldElement,
-//         config: config,
-//         proto: protoReflected?.proto ?? annotation,
-//         protoField: protoField ?? ProtoField(index++),
-//         // forEnum: true,
-//       );
-//       fieldDescriptors.add(fd);
-//     }
-//     return fieldDescriptors;
-//   }
-// }
 
 DartType _getRelevantFieldType(FieldElement fieldElement) {
   var relevantFieldType = fieldElement.type;

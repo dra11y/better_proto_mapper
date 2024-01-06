@@ -19,7 +19,7 @@ class ProtoReflected {
   }
 
   @override
-  String toString() => '''ProtoReflected(
+  String toString() => '''$runtimeType(
     proto: $proto,
     knownSubClasses: $knownSubClasses,
   )''';

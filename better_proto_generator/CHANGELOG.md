@@ -1,3 +1,12 @@
+ - automatically run `protoc` on each build with added ProtocRunner
+ - remove useWellKnownTimestamp and useWellKnownDuration options (better_protoc_plugin does automatic DateTime conversion)
+   - remove DurationFieldCodeGenerator, TimestampFieldCodeGenerator, SDateTimeFieldCodeGenerator, and SDurationFieldCodeGenerator
+ - add `@ProtoField.ignore()` annotation to exclude fields from the generated .protos
+ - fix some mapping conversions related to null safety in better_protoc_plugin
+ - sort fieldDescriptors by field number
+ - check for duplicate field numbers
+ - rename one of the ambiguously named FieldCodeGenerator classes to MapperFieldCodeGenerator
+
 ## 4.2.2
 
  - **FIX**: downgraded analyzer dependency to ^6.0.0.

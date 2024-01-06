@@ -1,8 +1,8 @@
-part of 'field_code_generator.dart';
+part of 'proto_field_code_generator.dart';
 
 abstract class CompositeFieldCodeGenerator
     with FieldCodeGeneratorMixin
-    implements FieldCodeGenerator {
+    implements ProtoFieldCodeGenerator {
   CompositeFieldCodeGenerator(this.fieldDescriptor);
 
   @override

@@ -3,14 +3,12 @@ import 'package:better_proto_generator/src/proto_mapper/field_code_generators/fi
 import 'package:recase/recase.dart';
 
 import 'standalone/generic_field_code_generator.dart';
-import 'standalone/datetime_field_code_generator.dart';
-import 'field_code_generator.dart';
+import 'mapper_field_code_generator.dart';
 import 'field_descriptor.dart';
-import 'standalone/duration_field_code_generator.dart';
 
 abstract class StandaloneFieldCodeGenerator
     with FieldCodeGeneratorIdentifiers
-    implements FieldCodeGenerator {
+    implements MapperFieldCodeGenerator {
   StandaloneFieldCodeGenerator({
     required this.fieldDescriptor,
     required this.refName,
@@ -56,7 +54,7 @@ abstract class StandaloneFieldCodeGenerator
 
   String get fromProtoNonNullableExpression => '$ref$protoFieldName!';
 
-  static FieldCodeGenerator? fromFieldDescriptor({
+  static MapperFieldCodeGenerator? fromFieldDescriptor({
     required FieldDescriptor fieldDescriptor,
     required String refName,
     required String protoRefName,
@@ -73,20 +71,6 @@ abstract class StandaloneFieldCodeGenerator
         fieldDescriptor.fieldElementType.isDartCoreString ||
         fieldDescriptor.fieldElementType.isDartCoreDouble) {
       return GenericFieldCodeGenerator(
-        fieldDescriptor: fieldDescriptor,
-        refName: refName,
-        protoRefName: protoRefName,
-      );
-    }
-    if (fieldDescriptor.fieldElementTypeName == (DateTime).toString()) {
-      return SDateTimeFieldCodeGenerator(
-        fieldDescriptor: fieldDescriptor,
-        refName: refName,
-        protoRefName: protoRefName,
-      );
-    }
-    if (fieldDescriptor.fieldElementTypeName == (Duration).toString()) {
-      return SDurationFieldCodeGenerator(
         fieldDescriptor: fieldDescriptor,
         refName: refName,
         protoRefName: protoRefName,
