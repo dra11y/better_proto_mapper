@@ -6,7 +6,6 @@ library proto_generator;
 import 'package:better_proto_annotations/config.dart';
 import 'package:better_proto_generator/src/proto_builder.dart';
 import 'package:better_proto_generator/src/proto_from_cache.dart';
-import 'package:better_proto_generator/src/protoc_from_cache.dart';
 import 'package:build/build.dart';
 import 'package:source_gen/source_gen.dart';
 

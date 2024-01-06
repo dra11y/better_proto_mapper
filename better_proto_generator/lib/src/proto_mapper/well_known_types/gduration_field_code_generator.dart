@@ -1,5 +1,4 @@
 import 'package:better_proto_annotations/config.dart';
-import 'package:squarealfa_generators_common/squarealfa_generators_common.dart';
 
 import '../wkt_field_code_generator.dart';
 
