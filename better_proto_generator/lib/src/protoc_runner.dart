@@ -1,8 +1,8 @@
 import 'dart:io';
 import 'dart:isolate';
 
+import 'package:better_proto_annotations/config.dart';
 import 'package:build/build.dart';
-import 'package:collection/collection.dart';
 import 'package:glob/glob.dart';
 import 'package:path/path.dart' as path;
 
@@ -18,34 +18,19 @@ import 'package:path/path.dart' as path;
 /// https://github.com/dart-lang/build/issues/3156
 ///
 class ProtocRunner implements Builder {
-  ProtocRunner();
+  final Config config;
 
-  /// This is really, really bad practice and warned against in the docs, but it seems to work for now!
-  /// But if we don't generate to temp, and just let `protoc` generate directly to lib/src/generated,
-  /// build_runner thinks files have changed and re-runs protoBuilder step, also not what we want.
+  ProtocRunner(this.config);
+
   @override
-  Map<String, List<String>> get buildExtensions {
-    final dir = Directory('generated');
-    if (!dir.existsSync()) {
-      return {
-        r'$lib$': ['*']
+  Map<String, List<String>> get buildExtensions => {
+        r'$lib$': ['.dart']
       };
-    }
-    final files = dir
-        .listSync(recursive: true)
-        .where((entity) => entity is File && entity.path.endsWith('.dart'))
-        .expand((file) => [
-              'src/${file.path}',
-              'src/${file.parent.path}/${path.basename(file.parent.path)}.dart',
-            ])
-        .toSet();
-    return {
-      r'$lib$': ['*', ...files]
-    };
-  }
 
   @override
   Future<void> build(BuildStep buildStep) async {
+    print('BUILD STEP 3: ProtocRunner');
+
     final List<AssetId> protos = [];
 
     await for (final input in buildStep.findAssets(Glob('**/*.proto'))) {
@@ -71,13 +56,14 @@ class ProtocRunner implements Builder {
     final pluginPath = path.normalize(path.join(
         path.dirname(betterProtocUri.path), '..', 'bin', 'protoc-gen-dart'));
 
-    final cacheDir = 'generated/grpc';
-    await Directory(cacheDir).create(recursive: true);
+    final grpcPath = 'lib/${config.outGrpcPath}';
+    final grpcDir = Directory(grpcPath);
+    await grpcDir.create(recursive: true);
     final protoPaths = protos.map((p) => path.dirname(p.path)).toSet();
 
     final args = <String>[
       '--plugin=$pluginPath',
-      '--dart_out=better_protos,grpc:$cacheDir',
+      '--dart_out=better_protos,grpc:$grpcPath',
       for (final protoPath in protoPaths) ...[
         '-I$protoPath',
         ...protos
@@ -97,30 +83,27 @@ class ProtocRunner implements Builder {
 
     await Process.run('buf', ['format', '-w']);
 
-    final grpcDir = Directory('generated/grpc');
     final barrelExports = <String, List<String>>{};
 
     await for (var entity in grpcDir.list(recursive: true)) {
+      final exportDir = entity.parent.path;
+
       if (entity is! File ||
           !entity.path.endsWith('.dart') ||
-          path.basename(entity.parent.path) ==
-              '${path.basename(entity.path)}.dart') {
+          path.basename(exportDir) == '${path.basename(entity.path)}.dart') {
         continue;
       }
 
-      final relativePath = entity.path.substring(grpcDir.path.length + 1);
-      final exportDir = entity.parent.path;
       barrelExports
           .putIfAbsent(exportDir, () => [])
           .add(entity.path.split('/').last);
-      final libPath = 'lib/src/generated/grpc/$relativePath';
-      final content = await entity.readAsString();
-      final assetId = AssetId(buildStep.inputId.package, libPath);
+      // final content = await entity.readAsString();
+      // final assetId = AssetId(buildStep.inputId.package, entity.path);
 
-      /// Since we're copying the files with `buildStep.writeAsString`, somehow
-      /// they magically get into the build graph and are not counted as changed
-      /// files by `watch`. But who knows how this actually works?
-      await buildStep.writeAsString(assetId, content);
+      // /// Since we're copying the files with `buildStep.writeAsString`, somehow
+      // /// they magically get into the build graph and are not counted as changed
+      // /// files by `watch`. But who knows how this actually works?
+      // await buildStep.writeAsString(assetId, content);
     }
 
     final slash = RegExp(r'/');
@@ -136,20 +119,23 @@ class ProtocRunner implements Builder {
           .map((e) =>
               '${e.substring(dirPath.length + 1)}/${path.basename(e)}.dart');
       final barrelFileName = '${path.basename(dirPath)}.dart';
-      final barrelFile = path.join(dirPath, barrelFileName);
+      final barrelFile = File(path.join(dirPath, barrelFileName));
       final exports = entry.value.where((file) => file != barrelFileName);
       final sb = StringBuffer();
 
-      if (dirPath == exportRoot) {
-        sb.writeln("export 'package:protobuf/protobuf.dart';\n");
+      if (dirPath == exportRoot &&
+          config.barrelCommonExportPackage.isNotEmpty) {
+        sb.writeln("export '${config.barrelCommonExportPackage}';\n");
       }
 
       for (var export in (exports.followedBy(children))) {
         sb.writeln("export '$export';");
       }
 
-      final assetId = AssetId(buildStep.inputId.package, 'lib/src/$barrelFile');
-      await buildStep.writeAsString(assetId, sb.toString());
+      await barrelFile.writeAsString(sb.toString());
+
+      // final assetId = AssetId(buildStep.inputId.package, 'lib/$barrelFile');
+      // await buildStep.writeAsString(assetId, sb.toString());
     }
   }
 }

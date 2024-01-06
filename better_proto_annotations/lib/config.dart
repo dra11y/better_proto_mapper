@@ -21,7 +21,9 @@ class Config {
   final IntPrecision defaultIntPrecision;
   final DecimalEncoding decimalEncoding;
   final String outProtoPath;
-  final String? toEntityMethodName;
+  final String outGrpcPath;
+  final String toEntityMethodName;
+  final String barrelCommonExportPackage;
 
   Config({
     this.useWellKnownWrappers = false,
@@ -31,8 +33,10 @@ class Config {
     this.prefix = 'G',
     this.defaultIntPrecision = IntPrecision.int32,
     this.decimalEncoding = DecimalEncoding.binary,
-    this.outProtoPath = 'proto/model.proto',
-    this.toEntityMethodName,
+    this.outProtoPath = 'generated/proto/generated.proto',
+    this.outGrpcPath = 'generated/grpc',
+    this.toEntityMethodName = 'toEntity',
+    this.barrelCommonExportPackage = 'package:protobuf/protobuf.dart',
   });
 
   factory Config.fromJson(Map<String, dynamic> json) => _$ConfigFromJson(json);

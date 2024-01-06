@@ -21,7 +21,9 @@ Config _$ConfigFromJson(Map<String, dynamic> json) => $checkedCreate(
             'defaultIntPrecision',
             'decimalEncoding',
             'outProtoPath',
-            'toEntityMethodName'
+            'outGrpcPath',
+            'toEntityMethodName',
+            'barrelCommonExportPackage'
           ],
         );
         final val = Config(
@@ -47,10 +49,15 @@ Config _$ConfigFromJson(Map<String, dynamic> json) => $checkedCreate(
               (v) =>
                   $enumDecodeNullable(_$DecimalEncodingEnumMap, v) ??
                   DecimalEncoding.binary),
-          outProtoPath: $checkedConvert(
-              'outProtoPath', (v) => v as String? ?? 'proto/model.proto'),
-          toEntityMethodName:
-              $checkedConvert('toEntityMethodName', (v) => v as String?),
+          outProtoPath: $checkedConvert('outProtoPath',
+              (v) => v as String? ?? 'generated/proto/generated.proto'),
+          outGrpcPath: $checkedConvert(
+              'outGrpcPath', (v) => v as String? ?? 'generated/grpc'),
+          toEntityMethodName: $checkedConvert(
+              'toEntityMethodName', (v) => v as String? ?? 'toEntity'),
+          barrelCommonExportPackage: $checkedConvert(
+              'barrelCommonExportPackage',
+              (v) => v as String? ?? 'package:protobuf/protobuf.dart'),
         );
         return val;
       },
@@ -66,7 +73,9 @@ Map<String, dynamic> _$ConfigToJson(Config instance) => <String, dynamic>{
           _$IntPrecisionEnumMap[instance.defaultIntPrecision]!,
       'decimalEncoding': _$DecimalEncodingEnumMap[instance.decimalEncoding]!,
       'outProtoPath': instance.outProtoPath,
+      'outGrpcPath': instance.outGrpcPath,
       'toEntityMethodName': instance.toEntityMethodName,
+      'barrelCommonExportPackage': instance.barrelCommonExportPackage,
     };
 
 const _$IntPrecisionEnumMap = {

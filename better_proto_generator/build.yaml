@@ -6,7 +6,7 @@ builders:
     builder_factories: ["protoBuilder", "protoMapperBuilder"]
     build_extensions: { "$lib$": [".tproto"], ".dart": ["proto_mapper.g.part"] }
     build_to: cache
-    auto_apply: dependents
+    auto_apply: root_package
     runs_before: [":protoFromCache"]
     applies_builders: [":protoFromCache"]
 
@@ -25,6 +25,5 @@ builders:
     build_extensions: { "$lib$": ["*"] }
     build_to: source
     required_inputs: [".proto"]
-    auto_apply: dependents
     runs_before: ["source_gen:combining_builder"]
     applies_builders: ["source_gen:combining_builder"]

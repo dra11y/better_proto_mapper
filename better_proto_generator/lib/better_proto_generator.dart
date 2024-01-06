@@ -21,4 +21,5 @@ Builder protoMapperBuilder(BuilderOptions options) => SharedPartBuilder(
 
 Builder protoFromCache(BuilderOptions options) => ProtoFromCache();
 
-Builder protocRunner(BuilderOptions options) => ProtocRunner();
+Builder protocRunner(BuilderOptions options) =>
+    ProtocRunner(Config.fromJson(options.config));

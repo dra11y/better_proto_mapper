@@ -1,3 +1,7 @@
+ - change `model.proto` to `generated.proto`
+
+---
+
  - automatically run `protoc` on each build with added ProtocRunner
  - remove useWellKnownTimestamp and useWellKnownDuration options (better_protoc_plugin does automatic DateTime conversion)
    - remove DurationFieldCodeGenerator, TimestampFieldCodeGenerator, SDateTimeFieldCodeGenerator, and SDurationFieldCodeGenerator

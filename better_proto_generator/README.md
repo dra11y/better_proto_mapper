@@ -105,21 +105,21 @@ Note that we are starting the first field with number 2, instead of 1. Unless yo
 
 From the terminal, in the directory of your package:
 ```sh
-# This will run proto_generator to generate lib/proto/model.proto
+# This will run proto_generator to generate lib/proto/generated.proto
 dart run build_runner build
 
 # create the lib/src/grpc directory
 mkdir -p lib/src/grpc  # or whatever equivalent for your OS
 
 # this will run the protoc compiler to generate lib/src/grpc/model.pb.dart, lib/src/grpc/model.pbenum.dart and lib/src/grpc/model.pbjson.dart files
-protoc --dart_out=grpc:lib/src/grpc -Ilib/proto  ./lib/proto/model.proto
+protoc --dart_out=grpc:lib/src/grpc -Ilib/proto  ./lib/proto/generated.proto
 
 # OPTIONAL - this reformats the proto file
-clang-format -i lib/proto/model.proto
+clang-format -i lib/proto/generated.proto
 ```
 *Hint*: Whenever you change any of your model classes, you will need to run this set of commands, so it is a good idea to integrate them into a shell script, a Makefile or whatever tool of your choice.
 
-By this point, you will get the following ```lib/proto/model.proto``` file:
+By this point, you will get the following ```lib/proto/generated.proto``` file:
 ```protobuf
 syntax = "proto3";
 
@@ -230,7 +230,7 @@ class Airplane extends Vehicle {
 }
 ```
 
-Here's the resulting contents of ```model.proto```:
+Here's the resulting contents of ```generated.proto```:
 ```protobuf
 syntax="proto3";
 
@@ -299,7 +299,7 @@ targets:
           wellKnownDurationType: $Duration
           wellKnownTimestampType: $Timestamp
           defaultIntPrecision: int32
-          outProtoPath: proto/model.proto
+          outProtoPath: proto/generated.proto
           decimalEncoding: binary,
           options:
             - go_package = "./stubs"
@@ -318,15 +318,15 @@ The available options are the following:
 | wellKnownTimestampType         | Defines an type name to be mapped to Google well known timestamp                                                                | $Timestamp        |
 | defaultIntPrecision            | Proto type to be generated for Dart int fields. May be ```int32``` or ```int64```                                               | int32             |
 | decimalEncoding                | Encoding of Decimal fields. May be ```binary``` (better performance) or ```string``` (easier to integrate with other languages) | binary            |
-| outProtoPath                   | Path, relative to the lib directory, to which the single .proto file is generated                                               | proto/model.proto |
+| outProtoPath                   | Path, relative to the lib directory, to which the single .proto file is generated                                               | proto/generated.proto |
 | options                        | Any option statement you want to add to the proto file.                                                                         | [none]            |
 
 ## Well Known Types (optional)
 
-You may, optionally, want to integrate the generated ```model.proto``` file with [Google Well Known Types](https://developers.google.com/protocol-buffers/docs/reference/google.protobuf). To do so, change the ```build.yaml``` file updating either of ```useWellKnownWrappers```, ```useWellKnownDuration``` or ```useWellKnownTimestamp``` settings to true.
+You may, optionally, want to integrate the generated ```generated.proto``` file with [Google Well Known Types](https://developers.google.com/protocol-buffers/docs/reference/google.protobuf). To do so, change the ```build.yaml``` file updating either of ```useWellKnownWrappers```, ```useWellKnownDuration``` or ```useWellKnownTimestamp``` settings to true.
 
 
-Let's assume you set them all to true. After running ```dart run build_runner build```, you will get the following ```model.proto```:
+Let's assume you set them all to true. After running ```dart run build_runner build```, you will get the following ```generated.proto```:
 
 ```protobuf
 syntax = "proto3";
@@ -347,7 +347,7 @@ message GIngredient {
 
 Now, assuming we have well known types installed in ```/usr/include/google/protobuf/```, we need to run the ```protoc``` with a few extra parameters:
 ```sh
-protoc --dart_out=grpc:lib/src/grpc -Ilib/proto -I/usr/include /usr/include/google/protobuf/*.proto  ./lib/proto/model.proto
+protoc --dart_out=grpc:lib/src/grpc -Ilib/proto -I/usr/include /usr/include/google/protobuf/*.proto  ./lib/proto/generated.proto
 ```
 
 Back to the ```ingredient.dart``` file we need to add some more imports:

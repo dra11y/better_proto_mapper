@@ -2,8 +2,6 @@
 /// and dart mapper files
 library proto_mapper_annotations;
 
-export 'dart:convert';
-
 export 'package:fixnum/fixnum.dart';
 
 export 'src/annotations.dart';

@@ -19,7 +19,7 @@ class ProtoBuilder implements Builder {
     modelPath = _getModelPath();
   }
 
-  static final _allFilesInLib = Glob('lib/**.dart');
+  static final _allFilesInLib = Glob('lib/src/**.dart');
   static final _ignoreFiles = RegExp(r'generated|.*\..*\.dart');
 
   @override
@@ -31,6 +31,8 @@ class ProtoBuilder implements Builder {
 
   @override
   Future<void> build(BuildStep buildStep) async {
+    print('BUILD STEP 1: ProtoBuilder');
+
     final protoGen = ProtoGenerator(config);
 
     final classes = <ClassElement, ProtoReflected>{};

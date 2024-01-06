@@ -285,7 +285,8 @@ class ProtoMapperGenerator extends GeneratorForAnnotation<Proto> {
         ? '$prefix$className toFieldsOfProto($className entity) => _\$${className}ToProto(entity);'
         : '${prefix}FieldsOf$className toFieldsOfProto($className entity) => _\$${className}ToFieldsOfProto(entity);';
 
-    final toEntity = config.toEntityMethodName ?? 'to$className';
+    final toEntity =
+        config.toEntityMethodName.replaceFirst('{className}', className);
 
     return '''
 
@@ -399,7 +400,8 @@ class ProtoMapperGenerator extends GeneratorForAnnotation<Proto> {
     final ret = kscs.map((ksc) {
       final className = ksc.getDisplayString(withNullability: false);
       final camelClassName = className.camelCase;
-      final toEntity = config.toEntityMethodName ?? 'to$className';
+      final toEntity =
+          config.toEntityMethodName.replaceFirst('{className}', className);
       final expression = '''
       if (sInstance.has$className()) {
         return sInstance.$camelClassName!.$toEntity();
