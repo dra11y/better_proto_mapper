@@ -45,8 +45,6 @@ class ProtoBuilder implements Builder {
     final filename = p.basename(modelPath);
     final output = AssetId(buildStep.inputId.package, p.join(path, filename));
 
-    print('Ran ProtoBuilder with output: $output');
-
     await buildStep.writeAsString(output, content);
   }
 

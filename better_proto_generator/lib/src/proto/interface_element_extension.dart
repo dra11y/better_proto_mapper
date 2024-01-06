@@ -32,6 +32,9 @@ extension ClassElementExtension on ClassElement {
             ' see https://protobuf.dev/programming-guides/proto3/#assigning');
       }
       if (!indices.add(protoField.number)) {
+        print('indices: $indices');
+        print('fieldSet: $fieldSet');
+
         throw Exception(
             'Duplicate field number on $name: ${fieldElement.name}, ${protoField.number},'
             ' see https://protobuf.dev/programming-guides/proto3/#assigning');

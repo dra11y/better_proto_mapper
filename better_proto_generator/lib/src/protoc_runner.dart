@@ -2,6 +2,7 @@ import 'dart:io';
 import 'dart:isolate';
 
 import 'package:build/build.dart';
+import 'package:collection/collection.dart';
 import 'package:glob/glob.dart';
 import 'package:path/path.dart' as path;
 
@@ -33,7 +34,11 @@ class ProtocRunner implements Builder {
     final files = dir
         .listSync(recursive: true)
         .where((entity) => entity is File && entity.path.endsWith('.dart'))
-        .map((file) => 'src/${file.path}');
+        .expand((file) => [
+              'src/${file.path}',
+              'src/${file.parent.path}/${path.basename(file.parent.path)}.dart',
+            ])
+        .toSet();
     return {
       r'$lib$': ['*', ...files]
     };
@@ -86,25 +91,65 @@ class ProtocRunner implements Builder {
     final result = await Process.run('protoc', args,
         workingDirectory: Directory.current.path);
 
-    print('Ran ProtocRunner with protoc exit code: ${result.exitCode}');
-
     if (result.exitCode != 0) {
-      throw Exception(result.stderr);
+      throw Exception('protoc exited with errors: ${result.stderr}');
     }
 
-    final generatedDir = Directory('generated');
-    await for (var entity in generatedDir.list(recursive: true)) {
-      if (entity is File && entity.path.endsWith('.dart')) {
-        final relativePath = entity.path.substring(generatedDir.path.length);
-        final libPath = 'lib/src/generated$relativePath';
-        final content = await entity.readAsString();
-        final assetId = AssetId(buildStep.inputId.package, libPath);
+    await Process.run('buf', ['format', '-w']);
 
-        /// Since we're copying the files with `buildStep.writeAsString`, somehow
-        /// they magically get into the build graph and are not counted as changed
-        /// files by `watch`. But who knows how this actually works?
-        await buildStep.writeAsString(assetId, content);
+    final grpcDir = Directory('generated/grpc');
+    final barrelExports = <String, List<String>>{};
+
+    await for (var entity in grpcDir.list(recursive: true)) {
+      if (entity is! File ||
+          !entity.path.endsWith('.dart') ||
+          path.basename(entity.parent.path) ==
+              '${path.basename(entity.path)}.dart') {
+        continue;
       }
+
+      final relativePath = entity.path.substring(grpcDir.path.length + 1);
+      final exportDir = entity.parent.path;
+      barrelExports
+          .putIfAbsent(exportDir, () => [])
+          .add(entity.path.split('/').last);
+      final libPath = 'lib/src/generated/grpc/$relativePath';
+      final content = await entity.readAsString();
+      final assetId = AssetId(buildStep.inputId.package, libPath);
+
+      /// Since we're copying the files with `buildStep.writeAsString`, somehow
+      /// they magically get into the build graph and are not counted as changed
+      /// files by `watch`. But who knows how this actually works?
+      await buildStep.writeAsString(assetId, content);
+    }
+
+    final slash = RegExp(r'/');
+    final exportRoot = barrelExports.keys.reduce((root, element) =>
+        slash.allMatches(element).length < slash.allMatches(root).length
+            ? element
+            : root);
+
+    for (var entry in barrelExports.entries) {
+      final dirPath = entry.key;
+      final children = barrelExports.keys
+          .where((dir) => dir.startsWith('$dirPath/'))
+          .map((e) =>
+              '${e.substring(dirPath.length + 1)}/${path.basename(e)}.dart');
+      final barrelFileName = '${path.basename(dirPath)}.dart';
+      final barrelFile = path.join(dirPath, barrelFileName);
+      final exports = entry.value.where((file) => file != barrelFileName);
+      final sb = StringBuffer();
+
+      if (dirPath == exportRoot) {
+        sb.writeln("export 'package:protobuf/protobuf.dart';\n");
+      }
+
+      for (var export in (exports.followedBy(children))) {
+        sb.writeln("export '$export';");
+      }
+
+      final assetId = AssetId(buildStep.inputId.package, 'lib/src/$barrelFile');
+      await buildStep.writeAsString(assetId, sb.toString());
     }
   }
 }

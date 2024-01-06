@@ -16,8 +16,6 @@ class ProtoFromCache implements Builder {
     final content = await buildStep.readAsString(inputId);
     final copyId = inputId.changeExtension('.proto');
 
-    print('Ran ProtoFromCache with output: $copyId');
-
     buildStep.writeAsString(copyId, content);
   }
 }

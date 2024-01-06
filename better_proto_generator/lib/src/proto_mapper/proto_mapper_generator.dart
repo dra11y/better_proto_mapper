@@ -402,7 +402,7 @@ class ProtoMapperGenerator extends GeneratorForAnnotation<Proto> {
       final toEntity = config.toEntityMethodName ?? 'to$className';
       final expression = '''
       if (sInstance.has$className()) {
-        return sInstance.$camelClassName.$toEntity();
+        return sInstance.$camelClassName!.$toEntity();
       }
       ''';
       return expression;
